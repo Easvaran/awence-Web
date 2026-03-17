@@ -126,9 +126,23 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
-                <Button asChild className="mt-2 w-full">
-                  <Link href="/contact">Get in Touch</Link>
-                </Button>
+                <div className="border-t border-border pt-4 mt-2 flex flex-col gap-4">
+                  {session ? (
+                    <Button asChild variant="outline" className="w-full justify-center gap-2">
+                      <Link href={dashboardHref} onClick={() => setMobileMenuOpen(false)}>
+                        <User size={16} />
+                        {user?.role === "admin" ? "Admin Panel" : "Employee Portal"}
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button asChild variant="outline" className="w-full justify-center">
+                      <Link href="/login?role=employee" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                    </Button>
+                  )}
+                  <Button asChild className="w-full">
+                    <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>Get in Touch</Link>
+                  </Button>
+                </div>
               </div>
             </motion.div>
           )}
