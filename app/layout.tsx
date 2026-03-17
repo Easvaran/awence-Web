@@ -9,8 +9,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Awence | Modern BPO Solutions',
-  description: 'Awence provides modern BPO solutions to streamline your business operations. Expert customer support, back-office processing, and digital transformation services.',
+  title: 'Awence | Modern TECH Solutions',
+  description: 'Awence provides modern TECH solutions to streamline your business operations. Expert customer support, back-office processing, and digital transformation services.',
   generator: '-',
   icons: {
     icon: [
