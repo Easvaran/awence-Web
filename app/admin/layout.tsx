@@ -14,18 +14,26 @@ export default function AdminLayout({
   return (
     <div className="flex bg-slate-50 min-h-screen">
       {/* Mobile Header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-20 bg-card border-b border-border flex items-center justify-between px-4 h-16">
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-card border-b border-border flex items-center justify-between px-4 h-16">
         <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
           Awence Admin
         </h2>
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2">
-          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          <Menu size={24} />
         </button>
       </header>
 
-      {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-full z-30 transition-transform transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+      {/* Sidebar for Desktop */}
+      <div className="hidden lg:block fixed top-0 left-0 h-full">
         <Sidebar />
+      </div>
+
+      {/* Sidebar for Mobile */}
+      <div className={`lg:hidden fixed top-0 left-0 h-full z-40 transition-transform transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <Sidebar />
+        <button onClick={() => setIsSidebarOpen(false)} className="absolute top-4 right-4 text-white p-2">
+          <X size={24} />
+        </button>
       </div>
 
       {/* Main Content */}
@@ -34,7 +42,7 @@ export default function AdminLayout({
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div 
-          className="lg:hidden fixed inset-0 bg-black/40 z-10"
+          className="lg:hidden fixed inset-0 bg-black/60 z-30"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
