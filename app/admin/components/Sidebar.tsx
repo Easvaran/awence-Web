@@ -18,8 +18,18 @@ const menuItems = [
   { name: "Settings", icon: Settings, href: "/admin/settings" },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  onLinkClick?: () => void;
+}
+
+export default function Sidebar({ onLinkClick }: SidebarProps) {
   const pathname = usePathname();
+
+  const handleLinkClick = () => {
+    if (onLinkClick) {
+      onLinkClick();
+    }
+  };
 
   return (
     <aside className="w-64 h-screen bg-card border-r border-border flex flex-col fixed left-0 top-0">
@@ -36,6 +46,7 @@ export default function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={handleLinkClick}
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                 isActive && "bg-primary/10 text-primary font-medium"
@@ -49,7 +60,10 @@ export default function Sidebar() {
       </nav>
       <div className="p-4 border-t border-border">
         <button
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={() => {
+            handleLinkClick();
+            signOut({ callbackUrl: "/" });
+          }}
           className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-500 hover:bg-red-50 transition-colors"
         >
           <LogOut size={20} />

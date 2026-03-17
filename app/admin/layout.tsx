@@ -30,7 +30,7 @@ export default function AdminLayout({
 
       {/* Sidebar for Mobile */}
       <div className={`lg:hidden fixed top-0 left-0 h-full z-40 transition-transform transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <Sidebar />
+        <Sidebar onLinkClick={() => setIsSidebarOpen(false)} />
         <button onClick={() => setIsSidebarOpen(false)} className="absolute top-4 right-4 text-white p-2">
           <X size={24} />
         </button>
