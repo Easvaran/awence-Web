@@ -17,6 +17,9 @@ interface Project {
   displaySize: number;
   category?: string;
   link?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface Review {
@@ -118,6 +121,9 @@ export default function ProjectsAdmin() {
   const [displaySize, setDisplaySize] = useState(300);
   const [category, setCategory] = useState("");
   const [link, setLink] = useState("");
+  const [status, setStatus] = useState("Shipped");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     fetchProjects();
@@ -171,6 +177,9 @@ export default function ProjectsAdmin() {
           displaySize,
           category,
           link,
+          status,
+          startDate,
+          endDate,
         }),
       });
 
@@ -182,6 +191,9 @@ export default function ProjectsAdmin() {
         setDisplaySize(300);
         setCategory("");
         setLink("");
+        setStatus("Shipped");
+        setStartDate("");
+        setEndDate("");
         fetchProjects();
       } else {
         const error = await res.json();
@@ -266,6 +278,40 @@ export default function ProjectsAdmin() {
                 max="800"
                 value={displaySize}
                 onChange={(e) => setDisplaySize(Number(e.target.value))}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <select
+                id="status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full p-2 border rounded-md"
+              >
+                <option value="Shipped">Shipped</option>
+                <option value="WIP">WIP</option>
+                <option value="RIP">RIP</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="startDate">Start Date</Label>
+              <Input
+                id="startDate"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="endDate">End Date</Label>
+              <Input
+                id="endDate"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
           </div>

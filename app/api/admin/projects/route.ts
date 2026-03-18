@@ -15,7 +15,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { projectName, image, description, displaySize, category, link } = await req.json();
+    const { projectName, image, description, displaySize, category, link, status, startDate, endDate } = await req.json();
 
     if (!projectName || !image) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -30,6 +30,9 @@ export async function POST(req: Request) {
       displaySize: displaySize || 200,
       category,
       link,
+      status,
+      startDate,
+      endDate,
     });
 
     return NextResponse.json(newProject, { status: 201 });
