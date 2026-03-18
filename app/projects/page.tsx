@@ -313,14 +313,6 @@ export default function ProjectsPage() {
                     </div>
                     <div className="p-6">
                       <h2 className="text-xl font-bold text-slate-900 mb-2">{project.projectName}</h2>
-                      <div className="flex items-center text-sm text-slate-500 mb-4">
-                        <span>{project.status}</span>
-                        <span className="mx-2">·</span>
-                        <span>
-                          {project.startDate && new Date(project.startDate).toLocaleDateString()} -
-                          {project.endDate && new Date(project.endDate).toLocaleDateString()}
-                        </span>
-                      </div>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.category?.split(',').map((cat) => (
                           <span key={cat} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">
