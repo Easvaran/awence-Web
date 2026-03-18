@@ -12,7 +12,6 @@ const defaultNavLinks = [
   { name: "courses", label: "Courses", href: "/courses", order: 6 },
   { name: "contact", label: "Contact", href: "/contact", order: 7 },
   { name: "clients", label: "Clients", href: "/clients", order: 8 },
-  { name: "showcase", label: "Showcase", href: "/showcase", order: 9 },
 ];
 
 export async function GET() {
@@ -41,12 +40,6 @@ export async function GET() {
       const hasCourses = settings.find(s => s.name === "courses");
       if (!hasCourses) {
         await NavSetting.create({ name: "courses", label: "Courses", href: "/courses", order: 6 });
-      }
-
-      // Check if showcase exists, if not add it
-      const hasShowcase = settings.find(s => s.name === "showcase");
-      if (!hasShowcase) {
-        await NavSetting.create({ name: "showcase", label: "Showcase", href: "/showcase", order: 9 });
       }
 
       settings = await NavSetting.find({}).sort({ order: 1 });
