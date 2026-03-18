@@ -313,14 +313,38 @@ export default function ContactPage() {
                         <h3 className="font-semibold text-foreground">
                           {info.title}
                         </h3>
-                        {info.details.map((detail, detailIndex) => (
-                          <p
-                            key={detailIndex}
-                            className="text-sm text-muted-foreground mt-1"
-                          >
-                            {detail}
-                          </p>
-                        ))}
+                        {info.details.map((detail, detailIndex) => {
+                          if (info.title === "Call Us") {
+                            return (
+                              <a
+                                key={detailIndex}
+                                href={`tel:${detail.replace(/\s+/g, '')}`}
+                                className="text-sm text-muted-foreground mt-1 hover:text-foreground transition-colors block"
+                              >
+                                {detail}
+                              </a>
+                            );
+                          }
+                          if (info.title === "Email Us") {
+                            return (
+                              <a
+                                key={detailIndex}
+                                href={`mailto:${detail}`}
+                                className="text-sm text-muted-foreground mt-1 hover:text-foreground transition-colors block"
+                              >
+                                {detail}
+                              </a>
+                            );
+                          }
+                          return (
+                            <p
+                              key={detailIndex}
+                              className="text-sm text-muted-foreground mt-1"
+                            >
+                              {detail}
+                            </p>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
