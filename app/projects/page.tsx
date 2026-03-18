@@ -306,7 +306,7 @@ export default function ProjectsPage() {
                         src={project.image}
                         alt={project.projectName}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        style={{ maxWidth: `${project.displaySize * 2}px`, margin: '0 auto' }}
+                        style={{ maxWidth: `${project.displaySize}px`, margin: '0 auto' }}
                       />
                       
                       {/* Project Link Overlay */}
