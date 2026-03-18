@@ -53,7 +53,19 @@ export default function EmployeeDashboard() {
       },
       (error) => {
         console.error("Location error:", error);
-        toast.error("Unable to retrieve your location. Please enable location services and try again.");
+        let errorMessage = "Unable to retrieve your location.";
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = "Location permission denied. Please enable it in your browser and phone settings.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = "Your location is currently unavailable. Please try again later.";
+            break;
+          case error.TIMEOUT:
+            errorMessage = "Getting your location timed out. Please ensure you have a stable connection.";
+            break;
+        }
+        toast.error(errorMessage);
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
@@ -154,8 +166,20 @@ export default function EmployeeDashboard() {
         }
       },
       (error) => {
-        console.error("Location error:", error);
-        toast.error("Unable to verify your location. Please enable location services.");
+        console.error("Location error during check-in:", error);
+        let errorMessage = "Unable to verify your location.";
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = "Location permission denied. Please enable it in your browser and phone settings to check in.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = "Your location is currently unavailable. Please try again to check in.";
+            break;
+          case error.TIMEOUT:
+            errorMessage = "Getting your location timed out. Please ensure you have a stable connection and try again.";
+            break;
+        }
+        toast.error(errorMessage);
         setIsCheckingLocation(false);
       },
       { enableHighAccuracy: true, timeout: 5000 }
