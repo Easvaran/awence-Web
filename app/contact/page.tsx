@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MapPin, Phone, Mail, Clock, ArrowRight, ExternalLink } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ArrowRight, ExternalLink, Facebook, Instagram, Linkedin } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const services = [
@@ -365,6 +365,48 @@ export default function ContactPage() {
                       </div>
                     </div>
                   ))}
+
+                  {/* Social Media Links Section */}
+                  {(settings?.facebook || settings?.instagram || settings?.linkedin) && (
+                    <div className="pt-8 border-t border-border mt-8">
+                      <h3 className="font-semibold text-foreground mb-4">Follow Us</h3>
+                      <div className="flex gap-4">
+                        {settings?.facebook && (
+                          <a 
+                            href={settings.facebook} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
+                            aria-label="Facebook"
+                          >
+                            <Facebook size={20} />
+                          </a>
+                        )}
+                        {settings?.instagram && (
+                          <a 
+                            href={settings.instagram} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
+                            aria-label="Instagram"
+                          >
+                            <Instagram size={20} />
+                          </a>
+                        )}
+                        {settings?.linkedin && (
+                          <a 
+                            href={settings.linkedin} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
+                            aria-label="LinkedIn"
+                          >
+                            <Linkedin size={20} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Live Map Section */}
                   <div className="mt-12 space-y-4">

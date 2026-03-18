@@ -6,6 +6,9 @@ const ContactSettingSchema = new mongoose.Schema(
     address: { type: String },
     phone: { type: String },
     email: { type: String },
+    facebook: { type: String },
+    instagram: { type: String },
+    linkedin: { type: String },
   },
   { timestamps: true }
 );

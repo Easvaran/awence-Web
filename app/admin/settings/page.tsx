@@ -43,6 +43,9 @@ export default function SettingsPage() {
   const [address, setAddress] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [linkedin, setLinkedin] = useState("");
 
   useEffect(() => {
     if ("Notification" in window) {
@@ -117,6 +120,9 @@ export default function SettingsPage() {
         setAddress(data.address);
         setContactPhone(data.phone);
         setContactEmail(data.email);
+        setFacebook(data.facebook || "");
+        setInstagram(data.instagram || "");
+        setLinkedin(data.linkedin || "");
       }
     } catch (error) {
       console.error("Failed to fetch contact settings:", error);
@@ -130,7 +136,15 @@ export default function SettingsPage() {
       const res = await fetch("/api/admin/contact-settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mapUrl, address, phone: contactPhone, email: contactEmail }),
+        body: JSON.stringify({ 
+          mapUrl, 
+          address, 
+          phone: contactPhone, 
+          email: contactEmail,
+          facebook,
+          instagram,
+          linkedin
+        }),
       });
 
       if (res.ok) {
@@ -533,6 +547,39 @@ export default function SettingsPage() {
                           value={contactEmail}
                           onChange={(e) => setContactEmail(e.target.value)}
                         />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 pt-4 border-t border-slate-100">
+                      <h4 className="text-sm font-bold text-slate-900">Social Media Links</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="facebook">Facebook URL</Label>
+                          <Input
+                            id="facebook"
+                            placeholder="https://facebook.com/awence"
+                            value={facebook}
+                            onChange={(e) => setFacebook(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="instagram">Instagram URL</Label>
+                          <Input
+                            id="instagram"
+                            placeholder="https://instagram.com/awence"
+                            value={instagram}
+                            onChange={(e) => setInstagram(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="linkedin">LinkedIn URL</Label>
+                          <Input
+                            id="linkedin"
+                            placeholder="https://linkedin.com/company/awence"
+                            value={linkedin}
+                            onChange={(e) => setLinkedin(e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

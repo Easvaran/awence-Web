@@ -15,6 +15,9 @@ export async function GET() {
         address: "No 8, Bharathi Nagar, GH Road, Thirumangalam, Madurai 625706",
         phone: "+91 77086 65431",
         email: "support@awence.com",
+        facebook: "https://facebook.com/awence",
+        instagram: "https://instagram.com/awence",
+        linkedin: "https://linkedin.com/company/awence",
       });
     }
     
@@ -32,12 +35,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { mapUrl, address, phone, email } = await req.json();
+    const { mapUrl, address, phone, email, facebook, instagram, linkedin } = await req.json();
     await connectDB();
     
     const settings = await ContactSetting.findOneAndUpdate(
       {},
-      { mapUrl, address, phone, email },
+      { mapUrl, address, phone, email, facebook, instagram, linkedin },
       { new: true, upsert: true }
     );
     
