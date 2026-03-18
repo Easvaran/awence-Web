@@ -53,8 +53,9 @@ export default function EmployeeDashboard() {
       },
       (error) => {
         console.error("Location error:", error);
-        toast.error("Unable to retrieve your location");
-      }
+        toast.error("Unable to retrieve your location. Please enable location services and try again.");
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
