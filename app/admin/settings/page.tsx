@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User, Mail, Shield, Save, Loader2, Bell, Globe, Layout, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Shield, Save, Loader2, Bell, Globe, Layout, Eye, EyeOff, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
-type TabType = "profile" | "notifications" | "security" | "localization" | "navigation";
+type TabType = "profile" | "notifications" | "security" | "localization" | "navigation" | "contact";
 
 interface NavSetting {
   _id: string;
@@ -37,6 +37,12 @@ export default function SettingsPage() {
 
   // Navigation states
   const [navSettings, setNavSettings] = useState<NavSetting[]>([]);
+
+  // Contact settings state
+  const [mapUrl, setMapUrl] = useState("");
+  const [address, setAddress] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
 
   useEffect(() => {
     if ("Notification" in window) {
@@ -82,6 +88,7 @@ export default function SettingsPage() {
   useEffect(() => {
     fetchProfile();
     fetchNavSettings();
+    fetchContactSettings();
   }, []);
 
   const fetchProfile = async () => {
@@ -98,6 +105,44 @@ export default function SettingsPage() {
       toast.error("An error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchContactSettings = async () => {
+    try {
+      const res = await fetch("/api/admin/contact-settings");
+      const data = await res.json();
+      if (res.ok) {
+        setMapUrl(data.mapUrl);
+        setAddress(data.address);
+        setContactPhone(data.phone);
+        setContactEmail(data.email);
+      }
+    } catch (error) {
+      console.error("Failed to fetch contact settings:", error);
+    }
+  };
+
+  const handleUpdateContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/contact-settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mapUrl, address, phone: contactPhone, email: contactEmail }),
+      });
+
+      if (res.ok) {
+        toast.success("Contact settings updated");
+      } else {
+        const error = await res.json();
+        toast.error(error.error || "Failed to update contact settings");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -212,6 +257,7 @@ export default function SettingsPage() {
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "security", label: "Security", icon: Shield },
     { id: "navigation", label: "Home Navigation", icon: Layout },
+    { id: "contact", label: "Contact Page", icon: MapPin },
     { id: "localization", label: "Localization", icon: Globe },
   ];
 
@@ -432,6 +478,71 @@ export default function SettingsPage() {
                     ))}
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {activeTab === "contact" && (
+              <motion.div
+                key="contact"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden"
+              >
+                <div className="p-6 border-b border-border bg-slate-50/50">
+                  <h3 className="text-lg font-bold">Contact Page Settings</h3>
+                  <p className="text-sm text-muted-foreground">Manage map and contact info on the public contact page.</p>
+                </div>
+                <form onSubmit={handleUpdateContact} className="p-6 space-y-6">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="mapUrl">Google Maps Embed URL</Label>
+                      <Input
+                        id="mapUrl"
+                        placeholder="https://www.google.com/maps/embed?..."
+                        value={mapUrl}
+                        onChange={(e) => setMapUrl(e.target.value)}
+                        required
+                      />
+                      <p className="text-[10px] text-muted-foreground">Go to Google Maps → Share → Embed map → Copy the 'src' URL from the iframe tag.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="address">Address</Label>
+                      <Input
+                        id="address"
+                        placeholder="Office Address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="contactPhone">Phone</Label>
+                        <Input
+                          id="contactPhone"
+                          placeholder="+91 77086 65431"
+                          value={contactPhone}
+                          onChange={(e) => setContactPhone(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="contactEmail">Email</Label>
+                        <Input
+                          id="contactEmail"
+                          placeholder="support@awence.com"
+                          value={contactEmail}
+                          onChange={(e) => setContactEmail(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-4 flex justify-end">
+                    <Button type="submit" className="gap-2 px-8" disabled={saving}>
+                      {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save size={18} />}
+                      Save Contact Info
+                    </Button>
+                  </div>
+                </form>
               </motion.div>
             )}
 

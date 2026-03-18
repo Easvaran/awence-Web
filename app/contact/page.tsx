@@ -16,31 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
-import { useState } from "react";
-
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "Visit Us",
-    details: ["No 8, Bharathi Nagar, GH Road", "Thirumangalam, Madurai 625706"],
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    details: ["+91 77086 65431"],
-  },
-  {
-    icon: Mail,
-    title: "Email Us",
-    details: ["support@awence.com"],
-  },
-  {
-    icon: Clock,
-    title: "Business Hours",
-    details: ["Mon - Fri: 9:00 AM - 6:00 PM", "24/7 Support Available"],
-  },
-];
+import { MapPin, Phone, Mail, Clock, ArrowRight, ExternalLink } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const services = [
   "Customer Support",
@@ -61,6 +38,7 @@ const companySizes = [
 import { toast } from "sonner";
 
 export default function ContactPage() {
+  const [settings, setSettings] = useState<any>(null);
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
@@ -73,6 +51,45 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch("/api/admin/contact-settings");
+      const data = await res.json();
+      if (res.ok) {
+        setSettings(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch settings:", error);
+    }
+  };
+
+  const dynamicContactInfo = [
+    {
+      icon: MapPin,
+      title: "Visit Us",
+      details: settings?.address ? [settings.address] : ["No 8, Bharathi Nagar, GH Road", "Thirumangalam, Madurai 625706"],
+    },
+    {
+      icon: Phone,
+      title: "Call Us",
+      details: settings?.phone ? [settings.phone] : ["+91 77086 65431"],
+    },
+    {
+      icon: Mail,
+      title: "Email Us",
+      details: settings?.email ? [settings.email] : ["support@awence.com"],
+    },
+    {
+      icon: Clock,
+      title: "Business Hours",
+      details: ["Mon - Fri: 9:00 AM - 6:00 PM", "24/7 Support Available"],
+    },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -304,7 +321,7 @@ export default function ContactPage() {
                   Get in touch
                 </h2>
                 <div className="space-y-8">
-                  {contactInfo.map((info, index) => (
+                  {dynamicContactInfo.map((info, index) => (
                     <div key={index} className="flex gap-4">
                       <div className="flex items-center justify-center w-12 h-12 rounded-md bg-muted flex-shrink-0">
                         <info.icon className="w-6 h-6 text-foreground" />
@@ -348,52 +365,45 @@ export default function ContactPage() {
                       </div>
                     </div>
                   ))}
-                </div>
 
-                {/* Global Offices */}
-                {/* <div className="mt-12 pt-12 border-t border-border">
-                  <h3 className="font-semibold text-foreground mb-6">
-                    Global Offices
-                  </h3>
-                  <div className="space-y-4">
-                    {[
-                      { city: "New York", country: "United States" },
-                      { city: "London", country: "United Kingdom" },
-                      { city: "Singapore", country: "Singapore" },
-                      { city: "Manila", country: "Philippines" },
-                    ].map((office, index) => (
-                      <div key={index}>
-                        <p className="font-medium text-foreground">
-                          {office.city}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {office.country}
-                        </p>
-                      </div>
-                    ))}
+                  {/* Live Map Section */}
+                  <div className="mt-12 space-y-4">
+                    <div className="relative rounded-2xl overflow-hidden border border-border shadow-sm bg-muted aspect-video">
+                      {settings?.mapUrl ? (
+                        <iframe
+                          src={settings.mapUrl}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title="Office Location"
+                        ></iframe>
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-muted-foreground text-sm italic">
+                          Map location not configured
+                        </div>
+                      )}
+                      
+                      {settings?.mapUrl && (
+                        <div className="absolute top-4 left-4">
+                          <Button size="sm" variant="secondary" className="gap-2 shadow-md bg-white/90 backdrop-blur-sm hover:bg-white" asChild>
+                            <a 
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address || "Awence Thirumangalam")}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <ExternalLink size={14} />
+                              Open in Maps
+                            </a>
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div> */}
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Teaser */}
-        <section className="py-12 lg:py-16 bg-muted/50">
-          <div className="max-w-2xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-2xl lg:text-3xl font-semibold text-foreground mb-3">
-              Have questions?
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Our team is ready to answer any questions you might have about our services, pricing, or implementation process.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-3">
-              <Button variant="outline" asChild>
-                <a href="tel:+917708665431">Call Us Now</a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a href="mailto:support@awence.com">Email Us</a>
-              </Button>
             </div>
           </div>
         </section>
