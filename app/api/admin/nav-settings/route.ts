@@ -45,7 +45,8 @@ export async function GET() {
       settings = await NavSetting.find({}).sort({ order: 1 });
     }
     
-    return NextResponse.json(settings);
+    const filteredSettings = settings.filter((s: any) => s.name !== 'showcase');
+    return NextResponse.json(filteredSettings);
   } catch (error: any) {
     console.error("NavSetting GET Error:", error);
     return NextResponse.json({ error: "Failed to fetch nav settings" }, { status: 500 });
