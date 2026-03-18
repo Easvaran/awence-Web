@@ -18,6 +18,9 @@ interface Project {
   displaySize: number;
   category?: string;
   link?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface Review {
@@ -291,7 +294,7 @@ export default function ProjectsPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {projects.map((project, index) => (
                   <motion.div
                     key={project._id}
@@ -299,44 +302,32 @@ export default function ProjectsPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="group"
+                    className="bg-white rounded-lg shadow-md overflow-hidden group"
                   >
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm transition-all duration-500 hover:shadow-2xl hover:border-primary/10 mb-8">
+                    <div className="relative aspect-[4/3]">
                       <img
                         src={project.image}
                         alt={project.projectName}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        style={{ maxWidth: `${project.displaySize}px`, margin: '0 auto' }}
+                        className="w-full h-full object-cover"
                       />
-                      
-                      {/* Project Link Overlay */}
-                      {project.link && (
-                        <a 
-                          href={project.link} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="absolute top-6 right-6 w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white"
-                        >
-                          <ExternalLink size={20} />
-                        </a>
-                      )}
                     </div>
-                    
-                    <div className="space-y-4 px-2">
-                      <div className="flex items-center gap-3">
-                        <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
-                          {project.category || "General"}
+                    <div className="p-6">
+                      <h2 className="text-xl font-bold text-slate-900 mb-2">{project.projectName}</h2>
+                      <div className="flex items-center text-sm text-slate-500 mb-4">
+                        <span>{project.status}</span>
+                        <span className="mx-2">·</span>
+                        <span>
+                          {project.startDate && new Date(project.startDate).toLocaleDateString()} -
+                          {project.endDate && new Date(project.endDate).toLocaleDateString()}
                         </span>
                       </div>
-                      <h3 className="text-2xl font-bold text-slate-900 group-hover:text-primary transition-colors">
-                        {project.projectName}
-                      </h3>
-                      <p className="text-slate-600 leading-relaxed line-clamp-3">
-                        {project.description}
-                      </p>
-
-                      {/* Review Section Added Below Project Image */}
-                      <ProjectReviewSection projectId={project._id} />
+                      <div className="flex flex-wrap gap-2">
+                        {project.category?.split(',').map((cat) => (
+                          <span key={cat} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">
+                            {cat.trim()}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </motion.div>
                 ))}
