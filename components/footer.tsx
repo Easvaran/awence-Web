@@ -18,7 +18,7 @@ const footerLinks: {
     // { href: "/industries", label: "Industries" },
     // { href: "/testimonials", label: "Testimonials" },
     { href: "/contact", label: "Contact" },
-    { href: "/clients", label: "Clients" },
+    { href: "/projects", label: "Projects" },
     { href: "/employee/dashboard", label: "Employee Portal" },
   ],
   services: [
