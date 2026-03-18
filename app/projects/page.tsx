@@ -321,13 +321,22 @@ export default function ProjectsPage() {
                           {project.endDate && new Date(project.endDate).toLocaleDateString()}
                         </span>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 mb-4">
                         {project.category?.split(',').map((cat) => (
                           <span key={cat} className="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">
                             {cat.trim()}
                           </span>
                         ))}
                       </div>
+                      
+                      {project.description && (
+                        <p className="text-sm text-slate-600 mb-6 line-clamp-3">
+                          {project.description}
+                        </p>
+                      )}
+
+                      {/* Review Section */}
+                      <ProjectReviewSection projectId={project._id} />
                     </div>
                   </motion.div>
                 ))}
