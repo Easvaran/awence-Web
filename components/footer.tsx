@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 
 interface FooterLink {
   href: string;
@@ -34,6 +38,24 @@ const footerLinks: {
 };
 
 export function Footer() {
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch("/api/admin/contact-settings");
+      const data = await res.json();
+      if (res.ok) {
+        setSettings(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch settings:", error);
+    }
+  };
+
   return (
     <footer className="bg-foreground text-primary-foreground">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
@@ -54,7 +76,7 @@ export function Footer() {
               Empowering businesses with modern TECH solutions. Your success is our priority.
             </p>
             <p className="mt-6 text-sm text-primary-foreground/60">
-              support@awence.com
+              {settings?.email || "support@awence.com"}
             </p>
           </div>
 
@@ -102,10 +124,50 @@ export function Footer() {
               Contact
             </h3>
             <address className="not-italic text-sm text-primary-foreground/70 space-y-2">
-              <p>No 8, Bharathi Nagar, GH Road,</p>
-              <p>Thirumangalam, Madurai 625706</p>
-              <p className="mt-4">+91 77086 65431</p>
+              <p>{settings?.address || "No 8, Bharathi Nagar, GH Road,"}</p>
+              {!settings?.address && <p>Thirumangalam, Madurai 625706</p>}
+              <p className="mt-4">{settings?.phone || "+91 77086 65431"}</p>
             </address>
+
+            {/* Social Media Links */}
+            {(settings?.facebook || settings?.instagram || settings?.linkedin) && (
+              <div className="mt-6 flex gap-4">
+                {settings?.facebook && (
+                  <a 
+                    href={settings.facebook} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
+                    aria-label="Facebook"
+                  >
+                    <Facebook size={16} />
+                  </a>
+                )}
+                {settings?.instagram && (
+                  <a 
+                    href={settings.instagram} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
+                    aria-label="Instagram"
+                  >
+                    <Instagram size={16} />
+                  </a>
+                )}
+                {settings?.linkedin && (
+                  <a 
+                    href={settings.linkedin} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin size={16} />
+                  </a>
+                )}
+              </div>
+            )}
+
             <div className="mt-6 pt-6 border-t border-primary-foreground/10">
               <ul className="space-y-2">
                 {footerLinks.legal.map((link) => (
