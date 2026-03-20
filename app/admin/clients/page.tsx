@@ -89,49 +89,49 @@ export default function ClientsPage() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Client Inquiries</h1>
-          <p className="text-slate-500 mt-1">Manage and respond to messages from your website's contact form.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Client Inquiries</h1>
+          <p className="text-slate-500 mt-1 text-sm sm:text-base">Manage and respond to messages from your website's contact form.</p>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
-              <MessageSquare size={24} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+              <MessageSquare size={20} className="sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-sm text-slate-500 font-medium">Total Messages</p>
-              <h3 className="text-2xl font-bold text-slate-900">{contacts.length}</h3>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">Total Messages</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900">{contacts.length}</h3>
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
-              <Clock size={24} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+              <Clock size={20} className="sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-sm text-slate-500 font-medium">New Messages</p>
-              <h3 className="text-2xl font-bold text-slate-900">
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">New Messages</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
                 {contacts.filter(c => c.status === 'new').length}
               </h3>
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
-              <CheckCircle2 size={24} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+              <CheckCircle2 size={20} className="sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-sm text-slate-500 font-medium">Responded</p>
-              <h3 className="text-2xl font-bold text-slate-900">
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">Responded</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
                 {contacts.filter(c => c.status === 'responded').length}
               </h3>
             </div>
@@ -140,8 +140,8 @@ export default function ClientsPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-        <div className="relative w-full md:w-96">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="relative w-full sm:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <Input
             placeholder="Search by name, email or message..."
@@ -155,7 +155,7 @@ export default function ClientsPage() {
       {/* Messages List */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="p-4 font-semibold text-slate-700">Client</th>

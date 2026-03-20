@@ -118,16 +118,18 @@ export default function ClientsVisitAdmin() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Clients Visit Management</h1>
-        <p className="text-slate-500 mt-1">Manage images and information for client visits displayed on the public page.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Clients Visit Management</h1>
+          <p className="text-slate-500 mt-1 text-sm sm:text-base">Manage images and information for client visits displayed on the public page.</p>
+        </div>
       </div>
 
       {/* Upload Section */}
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm max-w-2xl mx-auto">
-        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+      <div className="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm max-w-2xl mx-auto">
+        <h2 className="text-lg sm:text-xl font-bold mb-6 flex items-center gap-2">
           <Upload size={20} className="text-primary" />
           Add New Client Visit
         </h2>
@@ -143,7 +145,7 @@ export default function ClientsVisitAdmin() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="visitDate">Visit Date</Label>
               <Input
@@ -163,7 +165,7 @@ export default function ClientsVisitAdmin() {
                 value={displaySize}
                 onChange={(e) => setDisplaySize(Number(e.target.value))}
               />
-              <p className="text-xs text-slate-400">Controls how large the logo appears on the public page (50px to 400px).</p>
+              <p className="text-[10px] text-slate-400">Controls logo size on the public page (50px to 400px).</p>
             </div>
           </div>
 
@@ -179,7 +181,7 @@ export default function ClientsVisitAdmin() {
               />
               {logo ? (
                 <div className="relative w-full flex justify-center">
-                  <img src={logo} alt="Preview" className="max-h-40 object-contain rounded-lg shadow-sm" style={{ width: `${displaySize}px` }} />
+                  <img src={logo} alt="Preview" className="max-h-40 object-contain rounded-lg shadow-sm" style={{ width: `min(100%, ${displaySize}px)` }} />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-lg">
                     <p className="text-white text-sm font-medium">Click to change</p>
                   </div>
@@ -206,7 +208,7 @@ export default function ClientsVisitAdmin() {
             />
           </div>
 
-          <Button type="submit" className="w-full gap-2 py-6" disabled={saving || !logo}>
+          <Button type="submit" className="w-full gap-2 py-4 sm:py-6 text-base sm:text-lg" disabled={saving || !logo}>
             {saving ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} />}
             Upload Client Visit
           </Button>
@@ -215,11 +217,11 @@ export default function ClientsVisitAdmin() {
 
       {/* List Section */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-12">
-        <div className="p-6 border-b border-slate-100 bg-slate-50/50">
-          <h2 className="text-xl font-bold">Existing Client Records</h2>
+        <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+          <h2 className="text-lg sm:text-xl font-bold">Existing Client Records</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="p-4 font-semibold text-slate-700">Logo</th>

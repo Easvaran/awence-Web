@@ -76,22 +76,22 @@ export default function ReviewsAdminPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Global Reviews Management</h1>
-        <p className="text-slate-500 mt-1">Monitor and manage all user reviews across all projects.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Global Reviews Management</h1>
+        <p className="text-slate-500 mt-1 text-sm sm:text-base">Monitor and manage all user reviews across all projects.</p>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-          <h2 className="text-xl font-bold">All User Feedback</h2>
+        <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+          <h2 className="text-lg sm:text-xl font-bold">All User Feedback</h2>
           <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">
             {reviews.length} Total
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[900px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="p-4 font-semibold text-slate-700">User</th>
