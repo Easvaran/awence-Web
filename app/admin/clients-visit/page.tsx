@@ -220,7 +220,9 @@ export default function ClientsVisitAdmin() {
         <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
           <h2 className="text-lg sm:text-xl font-bold">Existing Client Records</h2>
         </div>
-        <div className="overflow-x-auto">
+        
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -275,6 +277,49 @@ export default function ClientsVisitAdmin() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {loading ? (
+            <div className="p-8 text-center text-slate-500">Loading records...</div>
+          ) : visits.length === 0 ? (
+            <div className="p-8 text-center text-slate-500">No client visits recorded yet.</div>
+          ) : (
+            <AnimatePresence>
+              {visits.map((visit) => (
+                <motion.div
+                  key={visit._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="p-4 space-y-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center p-2 shrink-0">
+                      <img src={visit.logo} alt={visit.clientName} className="max-w-full max-h-full object-contain" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-slate-900 truncate">{visit.clientName}</p>
+                      <p className="text-xs text-slate-500 mt-1">{new Date(visit.visitDate).toLocaleDateString()}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">Size: {visit.displaySize}px</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end pt-2 border-t border-slate-50">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 gap-1.5 text-red-600 border-red-100"
+                      onClick={() => deleteVisit(visit._id)}
+                    >
+                      <Trash2 size={14} /> Delete
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
         </div>
       </div>
     </div>
