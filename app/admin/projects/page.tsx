@@ -477,7 +477,7 @@ export default function ProjectsAdmin() {
             projects.map((project) => (
               <div key={project._id} className="p-4 space-y-4">
                 <div className="flex gap-4">
-                  <img src={project.image} alt={project.projectName} className="h-20 w-28 object-cover rounded-lg shadow-sm border border-slate-200 shrink-0" />
+                  <img src={project.image} alt={project.projectName} className="h-20 w-1/3 object-cover rounded-lg shadow-sm border border-slate-200 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-slate-900 truncate">{project.projectName}</p>
                     <div className="mt-1">
