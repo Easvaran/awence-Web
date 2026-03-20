@@ -152,8 +152,8 @@ export default function ClientsPage() {
         </div>
       </div>
 
-      {/* Messages List */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
@@ -265,6 +265,88 @@ export default function ClientsPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {loading ? (
+          <div className="py-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            Loading messages...
+          </div>
+        ) : filteredContacts.length === 0 ? (
+          <div className="py-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            No messages found.
+          </div>
+        ) : (
+          <AnimatePresence>
+            {filteredContacts.map((contact) => (
+              <motion.div
+                key={contact._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3"
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold uppercase text-xs">
+                      {contact.firstName?.[0] || ""}{contact.lastName?.[0] || ""}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 leading-tight">{contact.firstName} {contact.lastName}</p>
+                      <p className="text-[10px] text-slate-500">{contact.createdAt ? format(new Date(contact.createdAt), "MMM d, yyyy") : "N/A"}</p>
+                    </div>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-tight ${
+                    contact.status === 'new' ? 'bg-blue-100 text-blue-700' :
+                    contact.status === 'read' ? 'bg-slate-100 text-slate-700' :
+                    'bg-emerald-100 text-emerald-700'
+                  }`}>
+                    {contact.status}
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <Mail size={12} className="text-slate-400" />
+                    {contact.email}
+                  </div>
+                  {contact.phone && (
+                    <div className="flex items-center gap-2">
+                      <Phone size={12} className="text-slate-400" />
+                      {contact.phone}
+                    </div>
+                  )}
+                </div>
+
+                <div className="text-sm text-slate-700 bg-white border border-slate-100 p-3 rounded-xl italic">
+                  "{contact.message}"
+                </div>
+
+                <div className="flex justify-end gap-2 pt-1">
+                  {contact.status !== 'responded' && (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 gap-1.5 text-emerald-600 border-emerald-100"
+                      onClick={() => updateStatus(contact._id, 'responded')}
+                    >
+                      <CheckCircle2 size={16} /> Mark Done
+                    </Button>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-9 gap-1.5 text-red-600 border-red-100"
+                    onClick={() => deleteContact(contact._id)}
+                  >
+                    <Trash2 size={16} /> Delete
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
       </div>
     </div>
   );

@@ -373,7 +373,9 @@ export default function ProjectsAdmin() {
             {projects.length} Total
           </span>
         </div>
-        <div className="overflow-x-auto">
+        
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -460,6 +462,74 @@ export default function ProjectsAdmin() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {loading ? (
+            <div className="p-12 text-center text-slate-500">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-primary/40" />
+              Loading...
+            </div>
+          ) : projects.length === 0 ? (
+            <div className="p-12 text-center text-slate-500">No projects found.</div>
+          ) : (
+            projects.map((project) => (
+              <div key={project._id} className="p-4 space-y-4">
+                <div className="flex gap-4">
+                  <img src={project.image} alt={project.projectName} className="h-20 w-28 object-cover rounded-lg shadow-sm border border-slate-200 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-900 truncate">{project.projectName}</p>
+                    <div className="mt-1">
+                      <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded uppercase">
+                        {project.category || "General"}
+                      </span>
+                    </div>
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-xs text-primary flex items-center gap-1 mt-2 hover:underline">
+                        <ExternalLink size={10} /> Visit Link
+                      </a>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center pt-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 gap-1.5 text-slate-600 text-xs"
+                    onClick={() => setExpandedProject(expandedProject === project._id ? null : project._id)}
+                  >
+                    {expandedProject === project._id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    {expandedProject === project._id ? 'Hide Reviews' : 'Show Reviews'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    onClick={() => deleteProject(project._id)}
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                </div>
+
+                <AnimatePresence>
+                  {expandedProject === project._id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden bg-slate-50/50 rounded-xl mt-2"
+                    >
+                      <div className="p-2">
+                        <ProjectReviewsAdmin projectId={project._id} />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

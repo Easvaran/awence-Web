@@ -236,7 +236,8 @@ export default function AttendancePage() {
         </Button>
       </div>
 
-      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm overflow-x-auto">
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-card border border-border rounded-xl overflow-hidden shadow-sm overflow-x-auto">
         <table className="w-full text-left min-w-[600px]">
           <thead className="bg-slate-50 border-b border-border">
             <tr>
@@ -304,6 +305,70 @@ export default function AttendancePage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {loading ? (
+          <div className="py-12 text-center text-muted-foreground bg-card border border-border rounded-xl">
+            Loading attendance records...
+          </div>
+        ) : filteredAttendance.length === 0 ? (
+          <div className="py-12 text-center text-muted-foreground bg-card border border-border rounded-xl">
+            No records found.
+          </div>
+        ) : (
+          filteredAttendance.map((record) => (
+            <div key={record._id} className="bg-card border border-border rounded-xl p-4 shadow-sm space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-bold text-slate-900">{record.employeeId?.name}</div>
+                  <div className="text-xs text-muted-foreground">{record.employeeId?.email}</div>
+                </div>
+                <span className={`px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full ${
+                  record.status === 'Present' ? 'bg-green-100 text-green-700' :
+                  record.status === 'Late' ? 'bg-amber-100 text-amber-700' :
+                  record.status === 'On Leave' ? 'bg-blue-100 text-blue-700' :
+                  'bg-red-100 text-red-700'
+                }`}>
+                  {record.status}
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 text-sm pt-2 border-t border-slate-50">
+                <div>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Date</p>
+                  <p className="font-medium">{new Date(record.date).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Check In/Out</p>
+                  <p className="font-medium text-xs">
+                    {record.checkIn || "-"} / {record.checkOut || "-"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-50">
+                <Button 
+                  onClick={() => openEditModal(record)}
+                  variant="outline" 
+                  size="sm" 
+                  className="h-8 gap-1.5 text-blue-600 border-blue-100"
+                >
+                  <Edit2 size={14} /> Edit
+                </Button>
+                <Button 
+                  onClick={() => deleteRecord(record._id)}
+                  variant="outline" 
+                  size="sm" 
+                  className="h-8 gap-1.5 text-red-600 border-red-100"
+                >
+                  <Trash2 size={14} /> Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Modal */}

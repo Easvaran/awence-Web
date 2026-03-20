@@ -82,7 +82,8 @@ export default function ReviewsAdminPage() {
         <p className="text-slate-500 mt-1 text-sm sm:text-base">Monitor and manage all user reviews across all projects.</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
           <h2 className="text-lg sm:text-xl font-bold">All User Feedback</h2>
           <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">
@@ -179,6 +180,79 @@ export default function ReviewsAdminPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-bold">User Feedback</h2>
+          <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
+            {reviews.length} Total
+          </span>
+        </div>
+        
+        {loading ? (
+          <div className="py-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-primary/40" />
+            Loading reviews...
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="py-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            No reviews found.
+          </div>
+        ) : (
+          <AnimatePresence>
+            {reviews.map((review) => (
+              <motion.div
+                key={review._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3"
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold uppercase">
+                      {review.userName[0]}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 leading-tight text-sm">{review.userName}</p>
+                      <p className="text-[10px] text-slate-500 italic">{projects[review.projectId] || "Unknown Project"}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star 
+                        key={star} 
+                        size={10} 
+                        className={star <= review.rating ? "fill-amber-500 text-amber-500" : "text-slate-200"} 
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="text-sm text-slate-700 bg-slate-50 p-3 rounded-xl italic border border-slate-100">
+                  {review.comment || <span className="text-slate-400">No comment provided</span>}
+                </div>
+
+                <div className="flex justify-between items-center pt-1">
+                  <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                    <Calendar size={10} />
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-8 gap-1.5 text-red-600 border-red-100 text-[10px]"
+                    onClick={() => deleteReview(review._id)}
+                  >
+                    <Trash2 size={12} /> Delete
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
       </div>
     </div>
   );
