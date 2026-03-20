@@ -225,13 +225,15 @@ export default function ProjectsAdmin() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Projects Management</h1>
-        <p className="text-slate-500 mt-1">Showcase your best work on the public projects page.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Projects Management</h1>
+          <p className="text-slate-500 mt-1 text-sm sm:text-base">Showcase your best work on the public projects page.</p>
+        </div>
       </div>
 
       {/* Upload Section */}
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
+      <div className="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
         <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
           <Upload size={20} className="text-primary" />
           Add New Project
@@ -282,7 +284,7 @@ export default function ProjectsAdmin() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <select
@@ -328,7 +330,7 @@ export default function ProjectsAdmin() {
               />
               {image ? (
                 <div className="relative w-full flex justify-center">
-                  <img src={image} alt="Preview" className="max-h-60 object-contain rounded-lg shadow-md" style={{ width: `${displaySize / 2}px` }} />
+                  <img src={image} alt="Preview" className="max-h-60 object-contain rounded-lg shadow-md" style={{ width: `min(100%, ${displaySize / 2}px)` }} />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-lg">
                     <p className="text-white text-sm font-medium">Click to change</p>
                   </div>
@@ -356,7 +358,7 @@ export default function ProjectsAdmin() {
             />
           </div>
 
-          <Button type="submit" className="w-full gap-2 py-6 text-lg" disabled={saving || !image}>
+          <Button type="submit" className="w-full gap-2 py-4 sm:py-6 text-base sm:text-lg" disabled={saving || !image}>
             {saving ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
             Create Project Entry
           </Button>
@@ -365,14 +367,14 @@ export default function ProjectsAdmin() {
 
       {/* List Section */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-12">
-        <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+        <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
           <h2 className="text-xl font-bold">Live Projects</h2>
           <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">
             {projects.length} Total
           </span>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="p-4 font-semibold text-slate-700 w-10"></th>

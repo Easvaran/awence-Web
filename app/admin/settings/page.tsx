@@ -284,14 +284,14 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Sidebar Tabs */}
-        <div className="space-y-2">
+        <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 gap-2 scrollbar-hide">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as TabType)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all ${
+                className={`flex-none md:w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all whitespace-nowrap ${
                   activeTab === tab.id
                     ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                     : "text-muted-foreground hover:bg-white hover:text-slate-900 hover:shadow-sm"
@@ -529,7 +529,7 @@ export default function SettingsPage() {
                         onChange={(e) => setAddress(e.target.value)}
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="contactPhone">Phone</Label>
                         <Input

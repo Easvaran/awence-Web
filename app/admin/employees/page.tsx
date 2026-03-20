@@ -192,17 +192,17 @@ export default function EmployeesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Employees Management</h1>
-          <p className="text-muted-foreground mt-1">Manage and track your organization's personnel.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Employees Management</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Manage and track your organization's personnel.</p>
         </div>
-        <Button onClick={openAddModal} className="gap-2">
+        <Button onClick={openAddModal} className="gap-2 w-full sm:w-auto">
           <Plus size={18} /> Add Employee
         </Button>
       </div>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
           <Input
@@ -212,7 +212,7 @@ export default function EmployeesPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2 w-full sm:w-auto justify-center">
           <Filter size={18} /> Filter
         </Button>
       </div>

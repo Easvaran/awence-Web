@@ -32,7 +32,7 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
   };
 
   return (
-    <aside className="w-64 h-screen bg-card border-r border-border flex flex-col fixed left-0 top-0">
+    <aside className="w-64 h-full bg-card border-r border-border flex flex-col">
       <div className="p-6">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
           Awence Admin

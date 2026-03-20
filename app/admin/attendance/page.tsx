@@ -188,17 +188,17 @@ export default function AttendancePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Employee Attendance</h1>
-          <p className="text-muted-foreground mt-1">Manage and track daily employee attendance.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Employee Attendance</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Manage and track daily employee attendance.</p>
         </div>
-        <Button onClick={openAddModal} className="gap-2">
+        <Button onClick={openAddModal} className="gap-2 w-full sm:w-auto">
           <Plus size={18} /> Add Record
         </Button>
       </div>
 
-      <div className="flex gap-4 mb-6 items-end bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm">
+      <div className="flex flex-col lg:flex-row gap-4 mb-6 lg:items-end bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm">
         <div className="relative flex-1">
           <Label className="mb-2 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Search</Label>
           <div className="relative">
@@ -212,7 +212,7 @@ export default function AttendancePage() {
           </div>
         </div>
         
-        <div className="w-48">
+        <div className="w-full lg:w-48">
           <Label className="mb-2 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Select Month</Label>
           <div className="relative">
             <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
@@ -229,15 +229,15 @@ export default function AttendancePage() {
           onClick={handleExport}
           disabled={exporting}
           variant="outline" 
-          className="gap-2 h-11 px-6 border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 transition-all font-semibold"
+          className="gap-2 h-11 px-6 border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 transition-all font-semibold w-full lg:w-auto justify-center"
         >
           {exporting ? <Loader2 className="animate-spin" size={18} /> : <Download size={18} />}
           Download Report
         </Button>
       </div>
 
-      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
-        <table className="w-full text-left">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm overflow-x-auto">
+        <table className="w-full text-left min-w-[600px]">
           <thead className="bg-slate-50 border-b border-border">
             <tr>
               <th className="px-6 py-4 font-semibold text-sm">Employee</th>

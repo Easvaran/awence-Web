@@ -24,20 +24,27 @@ export default function AdminLayout({
       </header>
 
       {/* Sidebar for Desktop */}
-      <div className="hidden lg:block fixed top-0 left-0 h-full">
+      <div className="hidden lg:block fixed top-0 left-0 h-screen w-64 z-40">
         <Sidebar />
       </div>
 
       {/* Sidebar for Mobile */}
-      <div className={`lg:hidden fixed top-0 left-0 h-full z-40 transition-transform transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <div className={`lg:hidden fixed top-0 left-0 h-screen w-64 z-50 transition-all duration-300 ease-in-out transform ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}>
         <Sidebar onLinkClick={() => setIsSidebarOpen(false)} />
-        <button onClick={() => setIsSidebarOpen(false)} className="absolute top-4 right-4 text-white p-2">
+        <button 
+          onClick={() => setIsSidebarOpen(false)} 
+          className="absolute top-4 -right-12 bg-primary text-white p-2 rounded-r-lg shadow-md lg:hidden"
+        >
           <X size={24} />
         </button>
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-64 pt-16 lg:pt-8 p-4 lg:p-8">{children}</main>
+      <main className="flex-1 lg:ml-64 pt-16 lg:pt-0 min-h-screen">
+        <div className="p-4 lg:p-8 max-w-[1600px] mx-auto">
+          {children}
+        </div>
+      </main>
 
       {/* Overlay for mobile */}
       {isSidebarOpen && (
