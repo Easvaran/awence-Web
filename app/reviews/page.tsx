@@ -3,8 +3,12 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { motion } from "framer-motion";
-import { Star, MessageSquare, Quote, User, Calendar } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, MessageSquare, Quote, User, Calendar, Send, Loader2, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 interface Review {
   _id: string;
@@ -23,7 +27,16 @@ interface Project {
 export default function PublicReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [projects, setProjects] = useState<Record<string, string>>({});
+  const [projectsList, setProjectsList] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Form state
+  const [userName, setUserName] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -40,6 +53,7 @@ export default function PublicReviewsPage() {
       const projectsData = await projectsRes.json();
 
       if (Array.isArray(projectsData)) {
+        setProjectsList(projectsData);
         const projectMap: Record<string, string> = {};
         projectsData.forEach((p: Project) => {
           projectMap[p._id] = p.projectName;
@@ -54,6 +68,44 @@ export default function PublicReviewsPage() {
       console.error("Failed to fetch reviews:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userName || !projectId || !rating) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId,
+          userName,
+          rating,
+          comment,
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("Review submitted successfully!");
+        setUserName("");
+        setProjectId("");
+        setComment("");
+        setRating(5);
+        setShowForm(false);
+        fetchData();
+      } else {
+        toast.error("Failed to submit review");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -97,6 +149,102 @@ export default function PublicReviewsPage() {
         {/* Reviews Grid */}
         <section className="py-24 lg:py-32">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-16">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900">All Reviews</h2>
+                <p className="text-slate-500 mt-2">Showing {reviews.length} authentic client testimonials</p>
+              </div>
+              <Button 
+                onClick={() => setShowForm(!showForm)}
+                className="gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-6 rounded-2xl shadow-lg shadow-primary/20 transition-all active:scale-95"
+              >
+                {showForm ? "Cancel" : <><Plus size={20} /> Write a Review</>}
+              </Button>
+            </div>
+
+            <AnimatePresence>
+              {showForm && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="mb-16 overflow-hidden"
+                >
+                  <form 
+                    onSubmit={handleSubmit}
+                    className="bg-white p-8 lg:p-12 rounded-3xl border border-slate-100 shadow-xl space-y-8 max-w-3xl mx-auto"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-sm font-bold text-slate-900 ml-1">Your Name</label>
+                        <Input 
+                          placeholder="John Doe" 
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                          className="h-14 rounded-xl border-slate-200 focus:border-primary focus:ring-primary/10"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-sm font-bold text-slate-900 ml-1">Select Project</label>
+                        <select
+                          value={projectId}
+                          onChange={(e) => setProjectId(e.target.value)}
+                          className="w-full h-14 rounded-xl border border-slate-200 bg-white px-4 text-sm focus:border-primary focus:ring-primary/10 outline-none transition-all"
+                          required
+                        >
+                          <option value="">Choose a project...</option>
+                          {projectsList.map((p) => (
+                            <option key={p._id} value={p._id}>{p.projectName}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 text-center">
+                      <label className="text-sm font-bold text-slate-900">Your Rating</label>
+                      <div className="flex justify-center gap-3">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => setRating(star)}
+                            className="transition-all hover:scale-110 active:scale-90 p-2"
+                          >
+                            <Star 
+                              size={32} 
+                              className={star <= rating ? "fill-amber-500 text-amber-500" : "text-slate-200"} 
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className="text-sm font-bold text-slate-900 ml-1">Your Feedback</label>
+                      <Textarea 
+                        placeholder="Tell us about your experience working with us..." 
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        rows={4}
+                        className="rounded-xl border-slate-200 focus:border-primary focus:ring-primary/10 resize-none p-4"
+                        required
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full h-14 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-lg gap-3 shadow-lg shadow-primary/20"
+                      disabled={submitting}
+                    >
+                      {submitting ? <Loader2 size={24} className="animate-spin" /> : <Send size={20} />}
+                      Submit Review
+                    </Button>
+                  </form>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {loading ? (
               <div className="flex justify-center items-center min-h-[400px]">
                 <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>

@@ -34,6 +34,13 @@ interface Review {
 function ProjectReviewsAdmin({ projectId }: { projectId: string }) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  
+  // Form state
+  const [userName, setUserName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     fetchReviews();
@@ -53,6 +60,43 @@ function ProjectReviewsAdmin({ projectId }: { projectId: string }) {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userName || !rating) {
+      toast.error("Please provide your name and a rating");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId,
+          userName,
+          rating,
+          comment,
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("Review submitted successfully!");
+        setUserName("");
+        setComment("");
+        setRating(5);
+        setShowForm(false);
+        fetchReviews();
+      } else {
+        toast.error("Failed to submit review");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const deleteReview = async (reviewId: string) => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     try {
@@ -69,41 +113,111 @@ function ProjectReviewsAdmin({ projectId }: { projectId: string }) {
   };
 
   if (loading) return <div className="p-4 text-center text-xs text-slate-400">Loading reviews...</div>;
-  if (reviews.length === 0) return <div className="p-4 text-center text-xs text-slate-400 italic">No reviews yet for this project.</div>;
 
   return (
     <div className="p-4 space-y-3 bg-slate-50/50 rounded-xl mt-2 border border-slate-100">
-      <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">User Reviews ({reviews.length})</h4>
-      <div className="grid gap-3">
-        {reviews.map((review) => (
-          <div key={review._id} className="flex items-start justify-between bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-900 text-sm">{review.userName}</span>
-                <div className="flex gap-0.5">
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">User Reviews ({reviews.length})</h4>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => setShowForm(!showForm)}
+          className="h-7 text-[10px] px-2"
+        >
+          {showForm ? "Cancel" : "Add Review"}
+        </Button>
+      </div>
+
+      <AnimatePresence>
+        {showForm && (
+          <motion.form
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            onSubmit={handleSubmit}
+            className="mb-4 p-3 bg-white rounded-lg border border-slate-200 space-y-3 overflow-hidden"
+          >
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label className="text-[10px]">User Name</Label>
+                <Input 
+                  className="h-8 text-xs" 
+                  placeholder="John Doe" 
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[10px]">Rating</Label>
+                <div className="flex gap-1 h-8 items-center">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star 
-                      key={star} 
-                      size={10} 
-                      className={star <= review.rating ? "fill-amber-500 text-amber-500" : "text-slate-200"} 
-                    />
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className="transition-transform active:scale-90"
+                    >
+                      <Star 
+                        size={14} 
+                        className={star <= rating ? "fill-amber-500 text-amber-500" : "text-slate-300"} 
+                      />
+                    </button>
                   ))}
                 </div>
               </div>
-              {review.comment && <p className="text-xs text-slate-600 italic">"{review.comment}"</p>}
-              <p className="text-[10px] text-slate-400">{new Date(review.createdAt).toLocaleDateString()}</p>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0 text-red-400 hover:text-red-600 hover:bg-red-50"
-              onClick={() => deleteReview(review._id)}
-            >
-              <Trash2 size={14} />
+            <div className="space-y-1">
+              <Label className="text-[10px]">Comment</Label>
+              <Textarea 
+                className="text-xs" 
+                placeholder="Share thoughts..." 
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={2}
+              />
+            </div>
+            <Button type="submit" size="sm" className="w-full h-8 text-xs" disabled={submitting}>
+              {submitting ? <Loader2 size={14} className="animate-spin" /> : "Submit Review"}
             </Button>
-          </div>
-        ))}
-      </div>
+          </motion.form>
+        )}
+      </AnimatePresence>
+
+      {reviews.length === 0 ? (
+        <div className="text-center py-4 text-xs text-slate-400 italic">No reviews yet.</div>
+      ) : (
+        <div className="grid gap-3">
+          {reviews.map((review) => (
+            <div key={review._id} className="flex items-start justify-between bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-900 text-sm">{review.userName}</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star 
+                        key={star} 
+                        size={10} 
+                        className={star <= review.rating ? "fill-amber-500 text-amber-500" : "text-slate-200"} 
+                      />
+                    ))}
+                  </div>
+                </div>
+                {review.comment && <p className="text-xs text-slate-600 italic">"{review.comment}"</p>}
+                <p className="text-[10px] text-slate-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 text-red-400 hover:text-red-600 hover:bg-red-50"
+                onClick={() => deleteReview(review._id)}
+              >
+                <Trash2 size={14} />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

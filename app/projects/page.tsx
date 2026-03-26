@@ -3,12 +3,8 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Star, User, MessageSquare, Send, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { motion } from "framer-motion";
+import { ExternalLink, Star } from "lucide-react";
 
 interface Project {
   _id: string;
@@ -35,13 +31,6 @@ interface Review {
 function ProjectReviewSection({ projectId }: { projectId: string }) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  
-  // Form state
-  const [userName, setUserName] = useState("");
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState("");
 
   useEffect(() => {
     fetchReviews();
@@ -61,159 +50,19 @@ function ProjectReviewSection({ projectId }: { projectId: string }) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!userName || !rating) {
-      toast.error("Please provide your name and a rating");
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          projectId,
-          userName,
-          rating,
-          comment,
-        }),
-      });
-
-      if (res.ok) {
-        toast.success("Review submitted successfully!");
-        setUserName("");
-        setComment("");
-        setRating(5);
-        setShowForm(false);
-        fetchReviews();
-      } else {
-        toast.error("Failed to submit review");
-      }
-    } catch (error) {
-      toast.error("An error occurred");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const averageRating = reviews.length > 0 
     ? (reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length).toFixed(1)
     : null;
 
   return (
     <div className="mt-8 pt-8 border-t border-slate-100">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <h4 className="text-lg font-bold text-slate-900">Reviews ({reviews.length})</h4>
-          {averageRating && (
-            <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-1 rounded-lg text-sm font-bold">
-              <Star size={14} className="fill-amber-500 text-amber-500" />
-              {averageRating}
-            </div>
-          )}
-        </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => setShowForm(!showForm)}
-          className="gap-2"
-        >
-          {showForm ? "Cancel" : "Write a Review"}
-        </Button>
-      </div>
-
-      <AnimatePresence>
-        {showForm && (
-          <motion.form
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            onSubmit={handleSubmit}
-            className="mb-8 p-6 bg-slate-50 rounded-2xl border border-slate-100 space-y-4 overflow-hidden"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Your Name</label>
-                <Input 
-                  placeholder="John Doe" 
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Rating</label>
-                <div className="flex gap-2 h-10 items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="transition-transform active:scale-90"
-                    >
-                      <Star 
-                        size={24} 
-                        className={star <= rating ? "fill-amber-500 text-amber-500" : "text-slate-300"} 
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">Your Comment</label>
-              <Textarea 
-                placeholder="Share your thoughts on this project..." 
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                rows={3}
-              />
-            </div>
-            <Button type="submit" className="w-full gap-2" disabled={submitting}>
-              {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
-              Submit Review
-            </Button>
-          </motion.form>
-        )}
-      </AnimatePresence>
-
-      <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-        {loading ? (
-          <div className="text-center py-4 text-slate-400 text-sm">Loading reviews...</div>
-        ) : reviews.length === 0 ? (
-          <div className="text-center py-4 text-slate-400 text-sm italic">No reviews yet. Be the first to review!</div>
-        ) : (
-          reviews.map((review) => (
-            <div key={review._id} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
-                    {review.userName[0].toUpperCase()}
-                  </div>
-                  <span className="font-bold text-slate-900 text-sm">{review.userName}</span>
-                </div>
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star 
-                      key={star} 
-                      size={12} 
-                      className={star <= review.rating ? "fill-amber-500 text-amber-500" : "text-slate-200"} 
-                    />
-                  ))}
-                </div>
-              </div>
-              {review.comment && (
-                <p className="text-sm text-slate-600 leading-relaxed italic">
-                  "{review.comment}"
-                </p>
-              )}
-              <p className="text-[10px] text-slate-400 mt-2">
-                {new Date(review.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          ))
+      <div className="flex items-center gap-4 mb-2">
+        <h4 className="text-lg font-bold text-slate-900">Reviews ({reviews.length})</h4>
+        {averageRating && (
+          <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-1 rounded-lg text-sm font-bold">
+            <Star size={14} className="fill-amber-500 text-amber-500" />
+            {averageRating}
+          </div>
         )}
       </div>
     </div>
