@@ -14,6 +14,7 @@ const menuItems = [
   { name: "Clients Visit", icon: ImageIcon, href: "/admin/clients-visit" },
   { name: "Projects", icon: FolderKanban, href: "/admin/projects" },
   { name: "IT Projects", icon: FolderKanban, href: "/admin/it-projects" },
+  { name: "Services", icon: Layout, href: "/admin/services" },
   { name: "Reviews", icon: Star, href: "/admin/reviews" },
   { name: "Courses", icon: GraduationCap, href: "/admin/courses" },
   { name: "Settings", icon: Settings, href: "/admin/settings" },
