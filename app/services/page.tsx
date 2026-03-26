@@ -6,7 +6,81 @@ import { Footer } from "@/components/footer";
 import { CTASection } from "@/components/home/cta-section";
 import { motion } from "framer-motion";
 import * as LucideIcons from "lucide-react";
-import { ChevronRight, CheckCircle2, Zap } from "lucide-react";
+import { 
+  ChevronRight, 
+  CheckCircle2, 
+  Zap,
+  Headphones,
+  FileText,
+  BarChart3,
+  MessageSquare,
+  Mail,
+  Phone,
+  Clock,
+  Database,
+  FileCheck,
+  Calculator,
+  Users,
+  TrendingUp,
+  PieChart,
+  Brain,
+  Bot,
+  Cloud,
+  Shield,
+  Workflow,
+  Check
+} from "lucide-react";
+
+const oldServices = [
+  {
+    id: "customer-support",
+    icon: Headphones,
+    title: "Customer Support",
+    description: "Deliver exceptional customer experiences with our comprehensive multi-channel support solutions.",
+    features: [
+      { icon: MessageSquare, title: "Live Chat Support", description: "Real-time assistance for your customers across web and mobile platforms." },
+      { icon: Mail, title: "Email Management", description: "Efficient email handling with guaranteed response times and quality." },
+      { icon: Phone, title: "Voice Support", description: "Professional inbound and outbound call center services." },
+      { icon: Clock, title: "24/7 Availability", description: "Round-the-clock support in multiple languages and time zones." },
+    ],
+  },
+  {
+    id: "back-office",
+    icon: FileText,
+    title: "Back Office Processing",
+    description: "Streamline your administrative operations and focus on strategic business growth.",
+    features: [
+      { icon: Database, title: "Data Entry & Management", description: "Accurate and efficient data entry with quality assurance protocols." },
+      { icon: FileCheck, title: "Document Processing", description: "End-to-end document management, verification, and archival." },
+      { icon: Calculator, title: "Accounting Support", description: "Bookkeeping, invoicing, and financial data processing services." },
+      { icon: Users, title: "HR Administration", description: "Payroll processing, benefits administration, and employee records management." },
+    ],
+  },
+  {
+    id: "data-processing",
+    icon: BarChart3,
+    title: "Data Processing & Analytics",
+    description: "Transform raw data into actionable insights that drive informed business decisions.",
+    features: [
+      { icon: TrendingUp, title: "Data Analytics", description: "Advanced analytics to uncover trends and opportunities in your data." },
+      { icon: PieChart, title: "Business Intelligence", description: "Comprehensive BI solutions with custom dashboards and reporting." },
+      { icon: Brain, title: "Predictive Modeling", description: "AI-powered predictions to anticipate market trends and customer behavior." },
+      { icon: Database, title: "Data Warehousing", description: "Secure and scalable data storage and management solutions." },
+    ],
+  },
+  {
+    id: "digital-transformation",
+    icon: Zap,
+    title: "Digital Transformation",
+    description: "Modernize your operations with cutting-edge technology and automation solutions.",
+    features: [
+      { icon: Bot, title: "Process Automation", description: "RPA solutions to automate repetitive tasks and improve efficiency." },
+      { icon: Cloud, title: "Cloud Migration", description: "Seamless transition to cloud-based systems and infrastructure." },
+      { icon: Shield, title: "Cybersecurity", description: "Comprehensive security solutions to protect your digital assets." },
+      { icon: Workflow, title: "Workflow Optimization", description: "Streamlined processes that reduce bottlenecks and improve productivity." },
+    ],
+  },
+];
 
 interface ServiceItem {
   name: string;
@@ -212,6 +286,50 @@ export default function ServicesPage() {
                   <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Success Rate</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Operational Services (Old Data) */}
+        <section className="py-24 lg:py-32 bg-slate-100/50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-20">
+              <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">Our Operational Services</h2>
+              <p className="text-lg text-slate-600">
+                Beyond technology, we provide the essential operational support your business needs to thrive in a global market.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {oldServices.map((service, idx) => (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-600">
+                      <service.icon size={24} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900">{service.title}</h3>
+                  </div>
+                  <p className="text-slate-600 mb-8">{service.description}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {service.features.map((feature, fIdx) => (
+                      <div key={fIdx} className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <feature.icon size={18} className="text-blue-500" />
+                          <h4 className="font-bold text-slate-800 text-sm">{feature.title}</h4>
+                        </div>
+                        <p className="text-xs text-slate-500 leading-relaxed">{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
