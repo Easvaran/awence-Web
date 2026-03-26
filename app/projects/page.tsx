@@ -268,12 +268,22 @@ export default function ProjectsPage() {
                     transition={{ delay: index * 0.1 }}
                     className="bg-white rounded-lg shadow-md overflow-hidden group"
                   >
-                    <div className="relative aspect-[4/3]">
-                      <img
-                        src={project.image}
-                        alt={project.projectName}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      {project.link ? (
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                          <img
+                            src={project.image}
+                            alt={project.projectName}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                        </a>
+                      ) : (
+                        <img
+                          src={project.image}
+                          alt={project.projectName}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </div>
                     <div className="p-6">
                       <h2 className="text-xl font-bold text-slate-900 mb-2">{project.projectName}</h2>
