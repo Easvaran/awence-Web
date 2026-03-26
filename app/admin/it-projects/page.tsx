@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Upload, Trash2, Search, Loader2, Image as ImageIcon, ExternalLink, FolderKanban, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { Upload, Trash2, Search, Loader2, Image as ImageIcon, ExternalLink, FolderKanban, Star, ChevronDown, ChevronUp, Edit2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -227,6 +227,7 @@ export default function ITProjectsAdmin() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   
   // Form state
   const [projectName, setProjectName] = useState("");
@@ -281,8 +282,14 @@ export default function ITProjectsAdmin() {
 
     setSaving(true);
     try {
-      const res = await fetch("/api/admin/projects", {
-        method: "POST",
+      const url = editingId 
+        ? `/api/admin/projects/${editingId}`
+        : "/api/admin/projects";
+      
+      const method = editingId ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           projectName,
@@ -299,7 +306,7 @@ export default function ITProjectsAdmin() {
       });
 
       if (res.ok) {
-        toast.success("IT Project added successfully");
+        toast.success(editingId ? "IT Project updated successfully" : "IT Project added successfully");
         setProjectName("");
         setDescription("");
         setImage("");
@@ -309,16 +316,44 @@ export default function ITProjectsAdmin() {
         setStatus("Shipped");
         setStartDate("");
         setEndDate("");
+        setEditingId(null);
         fetchProjects();
       } else {
         const error = await res.json();
-        toast.error(error.error || "Failed to add IT project");
+        toast.error(error.error || `Failed to ${editingId ? 'update' : 'add'} IT project`);
       }
     } catch (error) {
       toast.error("An error occurred");
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleEdit = (project: Project) => {
+    setEditingId(project._id);
+    setProjectName(project.projectName);
+    setDescription(project.description || "");
+    setImage(project.image);
+    setDisplaySize(project.displaySize || 300);
+    setCategory(project.category || "");
+    setLink(project.link || "");
+    setStatus(project.status || "Shipped");
+    setStartDate(project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : "");
+    setEndDate(project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : "");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setProjectName("");
+    setDescription("");
+    setImage("");
+    setDisplaySize(300);
+    setCategory("");
+    setLink("");
+    setStatus("Shipped");
+    setStartDate("");
+    setEndDate("");
   };
 
   const deleteProject = async (id: string) => {
@@ -349,10 +384,17 @@ export default function ITProjectsAdmin() {
 
       {/* Upload Section */}
       <div className="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
-        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-          <Upload size={20} className="text-primary" />
-          Add New IT Project
-        </h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            {editingId ? <Edit2 size={20} className="text-primary" /> : <Upload size={20} className="text-primary" />}
+            {editingId ? "Edit IT Project" : "Add New IT Project"}
+          </h2>
+          {editingId && (
+            <Button variant="ghost" size="sm" onClick={cancelEdit} className="gap-2">
+              <X size={16} /> Cancel Edit
+            </Button>
+          )}
+        </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -474,8 +516,8 @@ export default function ITProjectsAdmin() {
           </div>
 
           <Button type="submit" className="w-full gap-2 py-4 sm:py-6 text-base sm:text-lg" disabled={saving || !image}>
-            {saving ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
-            Create IT Project Entry
+            {saving ? <Loader2 size={20} className="animate-spin" /> : editingId ? <Edit2 size={20} /> : <Upload size={20} />}
+            {editingId ? "Update IT Project Entry" : "Create IT Project Entry"}
           </Button>
         </form>
       </div>
@@ -544,14 +586,24 @@ export default function ITProjectsAdmin() {
                         </span>
                       </td>
                       <td className="p-4 text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          onClick={() => deleteProject(project._id)}
-                        >
-                          <Trash2 size={18} />
-                        </Button>
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-primary hover:text-primary hover:bg-primary/5"
+                            onClick={() => handleEdit(project)}
+                          >
+                            <Edit2 size={18} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            onClick={() => deleteProject(project._id)}
+                          >
+                            <Trash2 size={18} />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                     <AnimatePresence>
@@ -617,6 +669,15 @@ export default function ITProjectsAdmin() {
                   >
                     {expandedProject === project._id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     {expandedProject === project._id ? 'Hide Reviews' : 'Show Reviews'}
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 gap-1.5 text-primary text-xs"
+                    onClick={() => handleEdit(project)}
+                  >
+                    <Edit2 size={14} />
+                    Edit
                   </Button>
                   <Button
                     variant="ghost"
