@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, CalendarCheck, Settings, LogOut, UserRound, Image as ImageIcon, FolderKanban, Star, GraduationCap } from "lucide-react";
+import { LayoutDashboard, Users, CalendarCheck, Settings, LogOut, UserRound, Image as ImageIcon, FolderKanban, Star, GraduationCap, Layout } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 
