@@ -1,280 +1,268 @@
+"use client";
+
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CTASection } from "@/components/home/cta-section";
+import { motion } from "framer-motion";
 import {
-  Headphones,
-  FileText,
-  BarChart3,
-  Zap,
-  MessageSquare,
-  Mail,
-  Phone,
-  Clock,
+  Framer,
+  Layout,
+  Smartphone,
+  Server,
   Database,
-  FileCheck,
-  Calculator,
-  Users,
-  TrendingUp,
-  PieChart,
-  Brain,
-  Cog,
-  Bot,
+  ShieldCheck,
   Cloud,
-  Shield,
-  Workflow,
-  Check,
+  Code2,
+  Atom,
+  Layers,
+  PenTool,
+  Image as ImageIcon,
+  Cpu,
+  Monitor,
+  Globe,
+  Zap,
+  Box,
+  Github,
+  CheckCircle2,
+  ChevronRight,
 } from "lucide-react";
 
-const services = [
+const categories = [
   {
-    id: "customer-support",
-    icon: Headphones,
-    title: "Customer Support",
-    description:
-      "Deliver exceptional customer experiences with our comprehensive multi-channel support solutions.",
-    features: [
-      {
-        icon: MessageSquare,
-        title: "Live Chat Support",
-        description: "Real-time assistance for your customers across web and mobile platforms.",
-      },
-      {
-        icon: Mail,
-        title: "Email Management",
-        description: "Efficient email handling with guaranteed response times and quality.",
-      },
-      {
-        icon: Phone,
-        title: "Voice Support",
-        description: "Professional inbound and outbound call center services.",
-      },
-      {
-        icon: Clock,
-        title: "24/7 Availability",
-        description: "Round-the-clock support in multiple languages and time zones.",
-      },
+    title: "Design & Prototyping",
+    items: [
+      { name: "Figma", icon: Layers, color: "text-purple-500" },
+      { name: "Framer", icon: Framer, color: "text-blue-500" },
+      { name: "Photoshop", icon: ImageIcon, color: "text-blue-400" },
+      { name: "Illustrator", icon: PenTool, color: "text-orange-500" },
     ],
+    className: "lg:col-span-1 lg:row-span-1 bg-blue-600/10 border-blue-600/20",
+    titleColor: "text-blue-600",
   },
   {
-    id: "back-office",
-    icon: FileText,
-    title: "Back Office Processing",
-    description:
-      "Streamline your administrative operations and focus on strategic business growth.",
-    features: [
-      {
-        icon: Database,
-        title: "Data Entry & Management",
-        description: "Accurate and efficient data entry with quality assurance protocols.",
-      },
-      {
-        icon: FileCheck,
-        title: "Document Processing",
-        description: "End-to-end document management, verification, and archival.",
-      },
-      {
-        icon: Calculator,
-        title: "Accounting Support",
-        description: "Bookkeeping, invoicing, and financial data processing services.",
-      },
-      {
-        icon: Users,
-        title: "HR Administration",
-        description: "Payroll processing, benefits administration, and employee records management.",
-      },
+    title: "App Development (Web & Mobile)",
+    items: [
+      { name: "Tailwind CSS", icon: Layout, color: "text-cyan-400" },
+      { name: "JavaScript", icon: Code2, color: "text-yellow-400" },
+      { name: "React", icon: Atom, color: "text-blue-400" },
+      { name: "Dart", icon: Globe, color: "text-blue-500" },
+      { name: "Flutter", icon: Smartphone, color: "text-blue-400" },
+      { name: "MobX", icon: Zap, color: "text-orange-400" },
+      { name: "Hive", icon: Database, color: "text-yellow-500" },
     ],
+    className: "lg:col-span-2 lg:row-span-1 bg-slate-900 border-slate-800",
+    titleColor: "text-white",
+    isDark: true,
   },
   {
-    id: "data-processing",
-    icon: BarChart3,
-    title: "Data Processing & Analytics",
-    description:
-      "Transform raw data into actionable insights that drive informed business decisions.",
-    features: [
-      {
-        icon: TrendingUp,
-        title: "Data Analytics",
-        description: "Advanced analytics to uncover trends and opportunities in your data.",
-      },
-      {
-        icon: PieChart,
-        title: "Business Intelligence",
-        description: "Comprehensive BI solutions with custom dashboards and reporting.",
-      },
-      {
-        icon: Brain,
-        title: "Predictive Modeling",
-        description: "AI-powered predictions to anticipate market trends and customer behavior.",
-      },
-      {
-        icon: Database,
-        title: "Data Warehousing",
-        description: "Secure and scalable data storage and management solutions.",
-      },
+    title: "Backend Development",
+    items: [
+      { name: "Express.js", icon: Server, color: "text-slate-400" },
+      { name: ".NET", icon: Cpu, color: "text-purple-500" },
+      { name: "Node.js", icon: Server, color: "text-green-500" },
+      { name: "Python", icon: Code2, color: "text-blue-500" },
+      { name: "Firebase", icon: Flame, color: "text-orange-500" },
+      { name: "Postman", icon: Send, color: "text-orange-400" },
+      { name: "Redis", icon: Box, color: "text-red-500" },
     ],
+    className: "lg:col-span-2 lg:row-span-1 bg-slate-900 border-slate-800",
+    titleColor: "text-white",
+    isDark: true,
   },
   {
-    id: "digital-transformation",
-    icon: Zap,
-    title: "Digital Transformation",
-    description:
-      "Modernize your operations with cutting-edge technology and automation solutions.",
-    features: [
-      {
-        icon: Bot,
-        title: "Process Automation",
-        description: "RPA solutions to automate repetitive tasks and improve efficiency.",
-      },
-      {
-        icon: Cloud,
-        title: "Cloud Migration",
-        description: "Seamless transition to cloud-based systems and infrastructure.",
-      },
-      {
-        icon: Shield,
-        title: "Cybersecurity",
-        description: "Comprehensive security solutions to protect your digital assets.",
-      },
-      {
-        icon: Workflow,
-        title: "Workflow Optimization",
-        description: "Streamlined processes that reduce bottlenecks and improve productivity.",
-      },
+    title: "Database",
+    items: [
+      { name: "MySQL", icon: Database, color: "text-blue-600" },
+      { name: "MongoDB", icon: Database, color: "text-green-500" },
+      { name: "Azure Cosmos DB", icon: Cloud, color: "text-blue-400" },
     ],
+    className: "lg:col-span-1 lg:row-span-1 bg-blue-600/10 border-blue-600/20",
+    titleColor: "text-blue-600",
+  },
+  {
+    title: "Automation & Testing",
+    items: [
+      { name: "Appium", icon: Smartphone, color: "text-red-500" },
+      { name: "JMeter", icon: Zap, color: "text-red-400" },
+      { name: "Selenium", icon: ShieldCheck, color: "text-green-500" },
+      { name: "Playwright", icon: Layout, color: "text-green-400" },
+    ],
+    className: "lg:col-span-1 lg:row-span-1 bg-blue-600/10 border-blue-600/20",
+    titleColor: "text-blue-600",
+  },
+  {
+    title: "DevOps & Deployment",
+    items: [
+      { name: "Container Registry", icon: Box, color: "text-blue-400" },
+      { name: "AWS", icon: Cloud, color: "text-orange-400" },
+      { name: "Azure", icon: Cloud, color: "text-blue-500" },
+      { name: "Google Cloud", icon: Globe, color: "text-red-400" },
+      { name: "Terraform", icon: Box, color: "text-purple-400" },
+      { name: "Docker", icon: Box, color: "text-blue-400" },
+      { name: "GitHub Actions", icon: Github, color: "text-slate-400" },
+    ],
+    className: "lg:col-span-2 lg:row-span-1 bg-slate-900 border-slate-800",
+    titleColor: "text-white",
+    isDark: true,
   },
 ];
 
-const processSteps = [
-  {
-    step: "01",
-    title: "Discovery",
-    description: "We analyze your current operations, challenges, and goals to understand your unique needs.",
-  },
-  {
-    step: "02",
-    title: "Strategy",
-    description: "Our experts design a customized solution that aligns with your business objectives.",
-  },
-  {
-    step: "03",
-    title: "Implementation",
-    description: "We deploy your solution with careful planning to minimize disruption to your operations.",
-  },
-  {
-    step: "04",
-    title: "Optimization",
-    description: "Continuous monitoring and improvement to ensure sustained excellence and ROI.",
-  },
-];
+// Fallback for icons not in lucide-react
+import { Flame, Send } from "lucide-react";
 
 export default function ServicesPage() {
   return (
     <>
       <Header />
-      <main className="pt-16 lg:pt-20">
+      <main className="pt-16 lg:pt-20 min-h-screen bg-slate-50/30">
         {/* Hero Section */}
-        <section className="py-12 lg:py-16 bg-foreground">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="max-w-3xl">
-              <p className="text-sm font-medium uppercase tracking-widest text-primary-foreground/60 mb-6">
-                Our Services
-              </p>
-              <h1 className="text-4xl lg:text-5xl font-semibold text-primary-foreground leading-tight text-balance">
-                Comprehensive TECH solutions for your business needs
+        <section className="py-20 lg:py-32 bg-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/30 blur-[120px] rounded-full"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/30 blur-[120px] rounded-full"></div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="inline-block px-4 py-1.5 rounded-full bg-blue-600/10 border border-blue-600/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-6">
+                Our Tech Stack & Services
+              </span>
+              <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight mb-8">
+                Innovating with the <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Best Technologies</span>
               </h1>
-              <p className="mt-6 text-lg text-primary-foreground/70 leading-relaxed">
-                From customer support to digital transformation, we provide end-to-end services that help you operate more efficiently and scale with confidence.
+              <p className="max-w-2xl mx-auto text-xl text-slate-400 leading-relaxed">
+                We leverage cutting-edge tools and frameworks to build robust, scalable, and beautiful digital experiences for our clients.
               </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Bento Grid Services Section */}
+        <section className="py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {categories.map((cat, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  className={`p-8 rounded-[2rem] border shadow-sm flex flex-col justify-between ${cat.className}`}
+                >
+                  <div>
+                    <h3 className={`text-2xl font-bold mb-8 ${cat.titleColor}`}>
+                      {cat.title}
+                    </h3>
+                    
+                    <div className="flex flex-wrap gap-4">
+                      {cat.items.map((item, itemIdx) => (
+                        <motion.div
+                          key={itemIdx}
+                          whileHover={{ scale: 1.05 }}
+                          className={`flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all ${
+                            cat.isDark 
+                              ? "bg-slate-800/50 border-slate-700/50 hover:bg-slate-800 hover:border-slate-600" 
+                              : "bg-white border-blue-100 hover:border-blue-200 shadow-sm"
+                          }`}
+                        >
+                          <item.icon className={`w-5 h-5 ${item.color}`} />
+                          <span className={`text-sm font-bold ${cat.isDark ? "text-slate-200" : "text-slate-700"}`}>
+                            {item.name}
+                          </span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {cat.isDark && (
+                    <div className="mt-12 flex justify-end">
+                      <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                        <ChevronRight className="w-6 h-6" />
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Services Sections */}
-        {services.map((service, index) => (
-          <section
-            key={service.id}
-            id={service.id}
-            className={`py-12 lg:py-16 ${index % 2 === 0 ? "bg-background" : "bg-muted/50"}`}
-          >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
-              <div className="grid lg:grid-cols-2 gap-16 items-start">
-                {/* Service Header */}
-                <div className="lg:sticky lg:top-32">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="flex items-center justify-center w-14 h-14 rounded-lg bg-foreground">
-                      <service.icon className="w-7 h-7 text-primary-foreground" />
-                    </div>
-                    <h2 className="text-3xl font-semibold text-foreground">
-                      {service.title}
-                    </h2>
+        {/* Scrolling Tech Marquee Animation Placeholder / Visual */}
+        <section className="py-20 bg-slate-950 overflow-hidden border-y border-slate-900">
+          <div className="flex items-center gap-20 animate-marquee whitespace-nowrap">
+            {[...Array(2)].map((_, i) => (
+              <div key={i} className="flex items-center gap-20">
+                {categories.flatMap(c => c.items).map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-4 text-slate-500 font-bold uppercase tracking-widest text-sm opacity-50 hover:opacity-100 transition-opacity cursor-default">
+                    <item.icon className="w-6 h-6" />
+                    {item.name}
                   </div>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </p>
-                  <ul className="mt-8 space-y-3">
-                    {service.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-3">
-                        <Check className="w-5 h-5 text-foreground flex-shrink-0" />
-                        <span className="text-foreground">{feature.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
 
-                {/* Features Grid */}
-                <div className="grid sm:grid-cols-2 gap-6">
-                  {service.features.map((feature, featureIndex) => (
-                    <div
-                      key={featureIndex}
-                      className="p-6 bg-background border border-border rounded-lg"
-                    >
-                      <div className="flex items-center justify-center w-12 h-12 rounded-md bg-muted mb-4">
-                        <feature.icon className="w-6 h-6 text-foreground" />
+        <style jsx>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-marquee {
+            animation: marquee 40s linear infinite;
+            display: flex;
+            width: fit-content;
+          }
+        `}</style>
+
+        {/* Value Proposition */}
+        <section className="py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
+              <div>
+                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-8">
+                  We don't just write code. <br /> We build <span className="text-blue-600">Futures.</span>
+                </h2>
+                <p className="text-lg text-slate-600 leading-relaxed mb-10">
+                  Our team combines deep technical expertise with strategic thinking to deliver solutions that solve real-world problems and drive measurable growth.
+                </p>
+                <div className="space-y-6">
+                  {[
+                    "Custom software development tailored to your goals",
+                    "Seamless integration with your existing workflows",
+                    "Ongoing support and optimization for long-term success",
+                    "Transparent communication and agile delivery",
+                  ].map((text, i) => (
+                    <div key={i} className="flex items-center gap-4">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                        <CheckCircle2 className="w-4 h-4" />
                       </div>
-                      <h3 className="text-lg font-semibold text-foreground mb-2">
-                        {feature.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {feature.description}
-                      </p>
+                      <span className="text-slate-700 font-medium">{text}</span>
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
-          </section>
-        ))}
-
-        {/* Process Section */}
-        <section className="py-12 lg:py-16 bg-foreground">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <p className="text-sm font-medium uppercase tracking-widest text-primary-foreground/60 mb-4">
-                Our Process
-              </p>
-              <h2 className="text-3xl lg:text-4xl font-semibold text-primary-foreground">
-                How we work with you
-              </h2>
-              <p className="mt-4 text-primary-foreground/70">
-                A proven methodology that ensures successful outcomes for every engagement.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {processSteps.map((step, index) => (
-                <div key={index} className="text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border-2 border-primary-foreground/20 mb-6">
-                    <span className="text-2xl font-semibold text-primary-foreground">
-                      {step.step}
-                    </span>
+              <div className="relative">
+                <div className="aspect-square rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden shadow-2xl relative">
+                  <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop')] bg-cover"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white max-w-xs text-center">
+                      <Zap className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                      <p className="text-xl font-bold mb-2">High Performance</p>
+                      <p className="text-sm text-white/70">Optimized for speed, security, and scalability from day one.</p>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-primary-foreground mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-primary-foreground/70 leading-relaxed">
-                    {step.description}
-                  </p>
                 </div>
-              ))}
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white rounded-3xl shadow-xl border border-slate-100 p-6 hidden lg:block">
+                  <p className="text-4xl font-bold text-blue-600 mb-1">99%</p>
+                  <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Success Rate</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -285,3 +273,4 @@ export default function ServicesPage() {
     </>
   );
 }
+

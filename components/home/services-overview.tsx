@@ -1,31 +1,31 @@
 import Link from "next/link";
-import { Headphones, FileText, BarChart3, Zap } from "lucide-react";
+import { Layout, Server, Database, Cloud } from "lucide-react";
 
 const services = [
   {
-    icon: Headphones,
-    title: "Customer Support",
-    description: "24/7 multi-channel customer service that ensures your customers always have a voice to reach.",
-    href: "/services#customer-support",
+    icon: Layout,
+    title: "App Development",
+    description: "Build robust, scalable, and beautiful web and mobile applications using modern frameworks.",
+    href: "/services",
   },
   {
-    icon: FileText,
-    title: "Back Office Processing",
-    description: "Streamlined administrative operations that let you focus on what matters most—growing your business.",
-    href: "/services#back-office",
+    icon: Server,
+    title: "Backend Solutions",
+    description: "Powerful server-side architectures designed for performance and security.",
+    href: "/services",
   },
   {
-    icon: BarChart3,
-    title: "Data Processing & Analytics",
-    description: "Transform raw data into actionable insights with our advanced processing and analytics services.",
-    href: "/services#data-processing",
+    icon: Database,
+    title: "Database Management",
+    description: "Secure and optimized data storage solutions tailored to your business needs.",
+    href: "/services",
   },
-  // {
-  //   icon: Zap,
-  //   title: "Digital Transformation",
-  //   description: "Modernize your operations with cutting-edge technology and automation solutions.",
-  //   href: "/services#digital-transformation",
-  // },
+  {
+    icon: Cloud,
+    title: "DevOps & Cloud",
+    description: "Seamless deployment and infrastructure management for maximum uptime.",
+    href: "/services",
+  },
 ];
 
 export function ServicesOverview() {
