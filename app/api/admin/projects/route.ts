@@ -8,7 +8,18 @@ export async function GET(req: Request) {
     const projectType = searchParams.get("projectType") || "General";
     
     await connectDB();
-    const projects = await Project.find({ projectType }).sort({ createdAt: -1 });
+    
+    let query: any = { projectType };
+    if (projectType === "General") {
+      query = { 
+        $or: [
+          { projectType: "General" },
+          { projectType: { $exists: false } }
+        ]
+      };
+    }
+    
+    const projects = await Project.find(query).sort({ createdAt: -1 });
     return NextResponse.json(projects);
   } catch (error: any) {
     console.error("Project GET Error:", error);
