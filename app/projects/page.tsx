@@ -3,8 +3,12 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { motion } from "framer-motion";
-import { ExternalLink, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ExternalLink, Star, Send, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 interface Project {
   _id: string;
@@ -31,6 +35,13 @@ interface Review {
 function ProjectReviewSection({ projectId }: { projectId: string }) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  
+  // Form state
+  const [userName, setUserName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     fetchReviews();
@@ -50,21 +61,125 @@ function ProjectReviewSection({ projectId }: { projectId: string }) {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userName || !rating) {
+      toast.error("Please provide your name and a rating");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId,
+          userName,
+          rating,
+          comment,
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("Review submitted successfully!");
+        setUserName("");
+        setComment("");
+        setRating(5);
+        setShowForm(false);
+        fetchReviews();
+      } else {
+        toast.error("Failed to submit review");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const averageRating = reviews.length > 0 
     ? (reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length).toFixed(1)
     : null;
 
   return (
     <div className="mt-8 pt-8 border-t border-slate-100">
-      <div className="flex items-center gap-4 mb-2">
-        <h4 className="text-lg font-bold text-slate-900">Reviews ({reviews.length})</h4>
-        {averageRating && (
-          <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-1 rounded-lg text-sm font-bold">
-            <Star size={14} className="fill-amber-500 text-amber-500" />
-            {averageRating}
-          </div>
-        )}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4">
+          <h4 className="text-lg font-bold text-slate-900">Reviews ({reviews.length})</h4>
+          {averageRating && (
+            <div className="flex items-center gap-1 bg-amber-50 text-amber-700 px-2 py-1 rounded-lg text-sm font-bold">
+              <Star size={14} className="fill-amber-500 text-amber-500" />
+              {averageRating}
+            </div>
+          )}
+        </div>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => setShowForm(!showForm)}
+          className="gap-2 text-xs h-8"
+        >
+          {showForm ? "Cancel" : "Write a Review"}
+        </Button>
       </div>
+
+      <AnimatePresence>
+        {showForm && (
+          <motion.form
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            onSubmit={handleSubmit}
+            className="mb-4 p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3 overflow-hidden"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-700 uppercase">Your Name</label>
+                <Input 
+                  placeholder="John Doe" 
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="h-8 text-xs"
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-700 uppercase">Rating</label>
+                <div className="flex gap-1 h-8 items-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className="transition-transform active:scale-90"
+                    >
+                      <Star 
+                        size={16} 
+                        className={star <= rating ? "fill-amber-500 text-amber-500" : "text-slate-300"} 
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-700 uppercase">Your Comment</label>
+              <Textarea 
+                placeholder="Share your thoughts..." 
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={2}
+                className="text-xs"
+              />
+            </div>
+            <Button type="submit" size="sm" className="w-full gap-2 h-8 text-xs" disabled={submitting}>
+              {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+              Submit Review
+            </Button>
+          </motion.form>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
