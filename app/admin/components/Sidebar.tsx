@@ -13,6 +13,7 @@ const menuItems = [
   { name: "Clients", icon: UserRound, href: "/admin/clients" },
   { name: "Clients Visit", icon: ImageIcon, href: "/admin/clients-visit" },
   { name: "Projects", icon: FolderKanban, href: "/admin/projects" },
+  { name: "IT Projects", icon: FolderKanban, href: "/admin/it-projects" },
   { name: "Reviews", icon: Star, href: "/admin/reviews" },
   { name: "Courses", icon: GraduationCap, href: "/admin/courses" },
   { name: "Settings", icon: Settings, href: "/admin/settings" },

@@ -8,10 +8,11 @@ const defaultNavLinks = [
   { name: "about", label: "About", href: "/about", order: 2 },
   { name: "services", label: "Services", href: "/services", order: 3 },
   { name: "projects", label: "Projects", href: "/projects", order: 4 },
-  { name: "reviews", label: "Reviews", href: "/reviews", order: 5 },
-  { name: "courses", label: "Courses", href: "/courses", order: 6 },
-  { name: "contact", label: "Contact", href: "/contact", order: 7 },
-  { name: "clients", label: "Clients", href: "/clients", order: 8 },
+  { name: "it-projects", label: "IT Projects", href: "/it-projects", order: 5 },
+  { name: "reviews", label: "Reviews", href: "/reviews", order: 6 },
+  { name: "courses", label: "Courses", href: "/courses", order: 7 },
+  { name: "contact", label: "Contact", href: "/contact", order: 8 },
+  { name: "clients", label: "Clients", href: "/clients", order: 9 },
 ];
 
 export async function GET() {
@@ -30,16 +31,22 @@ export async function GET() {
         await NavSetting.create({ name: "projects", label: "Projects", href: "/projects", order: 4 });
       }
 
+      // Check if it-projects exists, if not add it
+      const hasITProjects = settings.find(s => s.name === "it-projects");
+      if (!hasITProjects) {
+        await NavSetting.create({ name: "it-projects", label: "IT Projects", href: "/it-projects", order: 5 });
+      }
+
       // Check if reviews exists, if not add it
       const hasReviews = settings.find(s => s.name === "reviews");
       if (!hasReviews) {
-        await NavSetting.create({ name: "reviews", label: "Reviews", href: "/reviews", order: 5 });
+        await NavSetting.create({ name: "reviews", label: "Reviews", href: "/reviews", order: 6 });
       }
 
       // Check if courses exists, if not add it
       const hasCourses = settings.find(s => s.name === "courses");
       if (!hasCourses) {
-        await NavSetting.create({ name: "courses", label: "Courses", href: "/courses", order: 6 });
+        await NavSetting.create({ name: "courses", label: "Courses", href: "/courses", order: 7 });
       }
 
       settings = await NavSetting.find({}).sort({ order: 1 });

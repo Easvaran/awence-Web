@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Project from "@/models/Project";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const projectType = searchParams.get("projectType") || "General";
+    
     await connectDB();
-    const projects = await Project.find({}).sort({ createdAt: -1 });
+    const projects = await Project.find({ projectType }).sort({ createdAt: -1 });
     return NextResponse.json(projects);
   } catch (error: any) {
     console.error("Project GET Error:", error);
@@ -15,7 +18,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { projectName, image, description, displaySize, category, link, status, startDate, endDate } = await req.json();
+    const { projectName, image, description, displaySize, category, link, status, startDate, endDate, projectType } = await req.json();
 
     if (!projectName || !image) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -33,6 +36,7 @@ export async function POST(req: Request) {
       status,
       startDate,
       endDate,
+      projectType: projectType || 'General',
     });
 
     return NextResponse.json(newProject, { status: 201 });

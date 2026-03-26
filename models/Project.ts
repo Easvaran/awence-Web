@@ -9,6 +9,7 @@ const ProjectSchema = new mongoose.Schema(
     category: { type: String },
     link: { type: String },
     status: { type: String, default: 'Shipped' }, // e.g., 'Shipped', 'WIP', 'RIP'
+    projectType: { type: String, enum: ['General', 'IT'], default: 'General' },
     startDate: { type: Date },
     endDate: { type: Date },
   },

@@ -184,7 +184,7 @@ function ProjectReviewSection({ projectId }: { projectId: string }) {
   );
 }
 
-export default function ProjectsPage() {
+export default function ITProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -194,13 +194,13 @@ export default function ProjectsPage() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch("/api/admin/projects?projectType=General");
+      const res = await fetch("/api/admin/projects?projectType=IT");
       const data = await res.json();
       if (Array.isArray(data)) {
         setProjects(data);
       }
     } catch (error) {
-      console.error("Failed to fetch projects:", error);
+      console.error("Failed to fetch IT projects:", error);
     } finally {
       setLoading(false);
     }
@@ -221,7 +221,7 @@ export default function ProjectsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-sm font-medium uppercase tracking-widest text-primary-foreground/60 mb-6"
               >
-                Our Portfolio
+                Our IT Portfolio
               </motion.p>
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
@@ -229,7 +229,7 @@ export default function ProjectsPage() {
                 transition={{ delay: 0.1 }}
                 className="text-4xl lg:text-6xl font-bold text-primary-foreground leading-tight tracking-tight"
               >
-                Delivering Excellence <br />Across Every Project
+                Cutting-Edge <br />IT Solutions
               </motion.h1>
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
@@ -237,7 +237,7 @@ export default function ProjectsPage() {
                 transition={{ delay: 0.2 }}
                 className="mt-8 text-xl text-primary-foreground/70 leading-relaxed max-w-2xl"
               >
-                Explore our successful track record of digital transformation and operational optimization for businesses worldwide.
+                Explore our successful track record of software development, network infrastructure, and digital innovation.
               </motion.p>
             </div>
           </div>
@@ -252,9 +252,9 @@ export default function ProjectsPage() {
               </div>
             ) : projects.length === 0 ? (
               <div className="bg-white rounded-3xl p-16 lg:p-24 border border-slate-200 text-center shadow-sm">
-                <h3 className="text-2xl font-semibold text-slate-900 mb-4">Our portfolio is being updated</h3>
+                <h3 className="text-2xl font-semibold text-slate-900 mb-4">Our IT portfolio is being updated</h3>
                 <p className="text-slate-500 max-w-lg mx-auto text-lg">
-                  We are currently preparing case studies of our latest projects. Please check back soon to see our work.
+                  We are currently preparing case studies of our latest IT projects. Please check back soon to see our work.
                 </p>
               </div>
             ) : (
@@ -304,9 +304,9 @@ export default function ProjectsPage() {
         {/* Call to Action */}
         <section className="py-24 bg-primary">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-8">Have a project in mind?</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-8">Have an IT project in mind?</h2>
             <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto mb-12">
-              Let's collaborate to bring your vision to life with our expert TECH and BPO solutions.
+              Let's collaborate to bring your IT vision to life with our expert technical solutions.
             </p>
             <a 
               href="/contact" 

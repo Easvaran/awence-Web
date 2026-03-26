@@ -222,7 +222,7 @@ function ProjectReviewsAdmin({ projectId }: { projectId: string }) {
   );
 }
 
-export default function ProjectsAdmin() {
+export default function ITProjectsAdmin() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -245,13 +245,13 @@ export default function ProjectsAdmin() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch("/api/admin/projects?projectType=General");
+      const res = await fetch("/api/admin/projects?projectType=IT");
       const data = await res.json();
       if (Array.isArray(data)) {
         setProjects(data);
       }
     } catch (error) {
-      toast.error("Failed to load projects");
+      toast.error("Failed to load IT projects");
     } finally {
       setLoading(false);
     }
@@ -294,12 +294,12 @@ export default function ProjectsAdmin() {
           status,
           startDate,
           endDate,
-          projectType: 'General',
+          projectType: 'IT',
         }),
       });
 
       if (res.ok) {
-        toast.success("Project added successfully");
+        toast.success("IT Project added successfully");
         setProjectName("");
         setDescription("");
         setImage("");
@@ -312,7 +312,7 @@ export default function ProjectsAdmin() {
         fetchProjects();
       } else {
         const error = await res.json();
-        toast.error(error.error || "Failed to add project");
+        toast.error(error.error || "Failed to add IT project");
       }
     } catch (error) {
       toast.error("An error occurred");
@@ -322,7 +322,7 @@ export default function ProjectsAdmin() {
   };
 
   const deleteProject = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this project?")) return;
+    if (!confirm("Are you sure you want to delete this IT project?")) return;
 
     try {
       const res = await fetch(`/api/admin/projects/${id}`, { method: "DELETE" });
@@ -342,8 +342,8 @@ export default function ProjectsAdmin() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Projects Management</h1>
-          <p className="text-slate-500 mt-1 text-sm sm:text-base">Showcase your best work on the public projects page.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">IT Projects Management</h1>
+          <p className="text-slate-500 mt-1 text-sm sm:text-base">Showcase your best IT work on the public IT projects page.</p>
         </div>
       </div>
 
@@ -351,7 +351,7 @@ export default function ProjectsAdmin() {
       <div className="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
         <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
           <Upload size={20} className="text-primary" />
-          Add New Project
+          Add New IT Project
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -359,7 +359,7 @@ export default function ProjectsAdmin() {
               <Label htmlFor="projectName">Project Name</Label>
               <Input
                 id="projectName"
-                placeholder="Awesome Web App..."
+                placeholder="Awesome IT Solution..."
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 required
@@ -369,7 +369,7 @@ export default function ProjectsAdmin() {
               <Label htmlFor="category">Category</Label>
               <Input
                 id="category"
-                placeholder="Web Development, AI, etc."
+                placeholder="Software, Network, AI, etc."
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               />
@@ -455,7 +455,7 @@ export default function ProjectsAdmin() {
                   <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-100">
                     <ImageIcon size={32} className="text-slate-400" />
                   </div>
-                  <p className="text-sm font-medium text-slate-600">Click or drag to upload project image</p>
+                  <p className="text-sm font-medium text-slate-600">Click or drag to upload IT project image</p>
                   <p className="text-xs text-slate-400 mt-1">PNG, JPG, WebP (Max 2MB)</p>
                 </div>
               )}
@@ -466,7 +466,7 @@ export default function ProjectsAdmin() {
             <Label htmlFor="description">Project Description</Label>
             <Textarea
               id="description"
-              placeholder="Tell us about this project..."
+              placeholder="Tell us about this IT project..."
               className="min-h-[100px]"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -475,7 +475,7 @@ export default function ProjectsAdmin() {
 
           <Button type="submit" className="w-full gap-2 py-4 sm:py-6 text-base sm:text-lg" disabled={saving || !image}>
             {saving ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
-            Create Project Entry
+            Create IT Project Entry
           </Button>
         </form>
       </div>
@@ -483,7 +483,7 @@ export default function ProjectsAdmin() {
       {/* List Section */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-12">
         <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-          <h2 className="text-xl font-bold">Live Projects</h2>
+          <h2 className="text-xl font-bold">Live IT Projects</h2>
           <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">
             {projects.length} Total
           </span>
@@ -506,12 +506,12 @@ export default function ProjectsAdmin() {
                 <tr>
                   <td colSpan={5} className="p-12 text-center text-slate-500">
                     <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-primary/40" />
-                    Loading project data...
+                    Loading IT project data...
                   </td>
                 </tr>
               ) : projects.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-12 text-center text-slate-500">No projects created yet.</td>
+                  <td colSpan={5} className="p-12 text-center text-slate-500">No IT projects created yet.</td>
                 </tr>
               ) : (
                 projects.map((project) => (
@@ -587,7 +587,7 @@ export default function ProjectsAdmin() {
               Loading...
             </div>
           ) : projects.length === 0 ? (
-            <div className="p-12 text-center text-slate-500">No projects found.</div>
+            <div className="p-12 text-center text-slate-500">No IT projects found.</div>
           ) : (
             projects.map((project) => (
               <div key={project._id} className="p-4 space-y-4">

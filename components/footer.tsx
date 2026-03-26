@@ -23,6 +23,7 @@ const footerLinks: {
     // { href: "/testimonials", label: "Testimonials" },
     { href: "/contact", label: "Contact" },
     { href: "/projects", label: "Projects" },
+    { href: "/it-projects", label: "IT Projects" },
     { href: "/employee/dashboard", label: "Employee Portal" },
   ],
   services: [
