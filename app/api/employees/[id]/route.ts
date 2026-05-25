@@ -11,6 +11,22 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { name, email, password, isApproved, status, age, dob, mobile, employeeId, department, position, manager } = await req.json();
     await connectDB();
     
+    // Check if email is being changed and if it's already taken by another user
+    if (email) {
+      const existingUser = await User.findOne({ email, _id: { $ne: id } });
+      if (existingUser) {
+        return NextResponse.json({ error: "Email already registered by another user" }, { status: 400 });
+      }
+    }
+    
+    // Check if employee ID is being changed and if it's already taken
+    if (employeeId) {
+      const existingEmployeeId = await User.findOne({ employeeId, _id: { $ne: id } });
+      if (existingEmployeeId) {
+        return NextResponse.json({ error: "Employee ID already exists" }, { status: 400 });
+      }
+    }
+    
     const updateData: any = { name, email, isApproved, status, age, dob, mobile, employeeId, department, position, manager };
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
@@ -22,9 +38,14 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       { new: true }
     ).select("-password");
     
+    if (!updated) {
+      return NextResponse.json({ error: "Employee not found" }, { status: 404 });
+    }
+    
     return NextResponse.json(updated);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update employee" }, { status: 500 });
+    console.error("Update Employee Error:", error);
+    return NextResponse.json({ error: "Failed to update employee", details: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
   }
 }
 
@@ -41,6 +62,6 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     return NextResponse.json({ message: "Employee and all their records deleted successfully" });
   } catch (error) {
     console.error("Delete Employee Error:", error);
-    return NextResponse.json({ error: "Failed to delete employee" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete employee", details: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
   }
 }
